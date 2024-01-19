@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import * as signalr from '@microsoft/signalr';
+import useConnection from "../Hooks/useConnection";
 
 type GameInfo = {
     groupID: string,
@@ -7,36 +8,37 @@ type GameInfo = {
 };
 
 const HostComponent = () => {
-    const [connection, setConnection] = useState<signalr.HubConnection>();
-    const [started, setstarted] = useState<boolean>(false);
+    const [connection, setConnection] = useConnection()
     const [gameInfo, setGameInfo] = useState<GameInfo>();
-
-    useEffect(() => {
-        const newConnection = new signalr.HubConnectionBuilder()
-            .withUrl("http://localhost:5161/game",
-                { skipNegotiation: true, transport: signalr.HttpTransportType.WebSockets })
-            .withAutomaticReconnect()
-            .build()
-        
-        setConnection(newConnection)
-    }, [])
+    const [userNames, setUserNames] = useState<string[]>([])
+    
+    const [started, setstarted] = useState<boolean>(false);
 
     useEffect(() => {
         if(connection && !started) {
             setstarted(true)
             connection.start()
-                .then(res => { console.log('Connected');
-            
-                connection.on('onGroupCreated', groupInfo => {
-                    setGameInfo(groupInfo)
-                })
+                .then(res => {
+                    console.log('Connected');
+                    connection.on('onGroupCreated', groupInfo => {
+                        setGameInfo(groupInfo)
+                    });
+
+                    connection.on('playerJoined', userName  => {
+                        setUserNames(UserNames => [...UserNames, userName] );
+                    });
                 });
         }
-    }, [started, connection, gameInfo]);
+    }, [connection, started, userNames]);
+    
     const onClick = () => {
-        connection && connection.invoke("CreateGroup", "pokoj")
+        started && connection && connection.invoke("CreateGroup", "pokoj")
     
     }
-    return <div><button onClick={onClick}>Create Group</button>To Join Input: {gameInfo && gameInfo.groupID}</div>
+    return <div>
+        <button onClick={onClick}>Create Group</button>
+        To Join Input: {gameInfo && gameInfo.groupID}
+        <div>{userNames.map((username) => <li>{username}</li>)}</div> 
+    </div>
 }
 export default HostComponent
