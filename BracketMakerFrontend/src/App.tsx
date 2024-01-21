@@ -1,10 +1,11 @@
 import React from 'react';
 import HostComponent from "./Components/HostComponent";
 import './App.css';
+import GamemodeComponent from "./Components/GamemodeComponent";
 
 function App() {
   return (
-      <HostComponent/>
+      <GamemodeComponent/>
   );
 }
 

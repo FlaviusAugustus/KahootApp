@@ -3,17 +3,33 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import * as Router from "react-router-dom";
+import GamemodeComponent from "./Components/GamemodeComponent";
+import PlayerComponent from "./Components/PlayerComponent";
+import HostComponent from "./Components/HostComponent";
+
+const router = Router.createBrowserRouter([
+    {
+        path: "/",
+        element: <GamemodeComponent/>
+    },
+    {
+        path: "/join",
+        element: <PlayerComponent/>,
+    },
+    {
+        path: "/host",
+        element: <HostComponent/>
+    }
+]);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
+
   <React.StrictMode>
-    <App />
+      <Router.RouterProvider router={router}/>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
