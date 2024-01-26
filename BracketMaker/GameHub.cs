@@ -23,7 +23,7 @@ public class GameHub(IGameService gameService) : Hub
 
      public async Task JoinGroup(string groupId, string userName)
      {
-          var joinRequest = new JoinRequest()
+          var joinRequest = new JoinRequest
           {
                GroupID = groupId,
                UserName = userName,
@@ -45,11 +45,7 @@ public class GameHub(IGameService gameService) : Hub
 
      public void StopGame(string groupID)
      {
-          var gameExists = gameService.GameHosts.TryGetValue(groupID, out var gameInfo);
-          if (gameExists)
-          {
-               gameService.GameHosts.Remove(groupID);
-          }
+          gameService.GameHosts.Remove(groupID);
      }
 
      public async Task SendScore(GameAnswer gameAnswer)
