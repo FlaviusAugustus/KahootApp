@@ -51,20 +51,10 @@ public class GameHub(IGameService gameService) : Hub
 
      public async Task SendScore(GameAnswer gameAnswer)
      {
+          var isAnswerCorrect = gameService.ProcessAnswer(gameAnswer);
           var gameInfo = gameService.GameHosts[gameAnswer.GameID];
-          var player = gameInfo.Players.Single(p => p.UserName == gameAnswer.UserName);
-          var question = gameInfo.Questions[gameAnswer.QuestionID];
-
-          if ((question.Answer & gameAnswer.Answer) != 0)
-          {
-               player.Score++;
-               await Clients.Caller.SendAsync("goodAnswer", player.Score);
-          }
-          else
-          {
-               await Clients.Caller.SendAsync("wrongAnswer", player.Score);
-          }
-          await Clients.Client(gameInfo.HostConnectionID).SendAsync("playerAnswered", player.UserName);
+          await Clients.Client(gameInfo.HostConnectionID).SendAsync("playerAnswered", isAnswerCorrect);
+          await Clients.Caller.SendAsync("answerResult", isAnswerCorrect);
      }
 
      public async Task GetNextQuestion(string groupID, int questionID = -1)
