@@ -40,14 +40,13 @@ public class GameHub(IGameService gameService) : Hub
           await Clients.Caller.SendAsync("joinedGame", userName);
      }
 
-     public async Task StopGame(string groupID)
+     public void StopGame(string groupID)
      {
           var gameExists = gameService.GameHosts.TryGetValue(groupID, out var gameInfo);
-          if (!gameExists)
+          if (gameExists)
           {
-               await Clients.Caller.SendAsync("groupDoesNotExist", groupID);
+               gameService.GameHosts.Remove(groupID);
           }
-          gameService.GameHosts.Remove(groupID);
      }
 
      public async Task SendScore(GameAnswer gameAnswer)
