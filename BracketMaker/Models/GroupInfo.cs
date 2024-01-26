@@ -1,7 +1,7 @@
 ﻿namespace BracketMaker.Models;
 
-public class GroupModel
+public class GroupInfo
 {
-    public string GroupName { get; set; }
+    public string HostConnectionID { get; set; }
     public string GroupID { get; set; }
 }

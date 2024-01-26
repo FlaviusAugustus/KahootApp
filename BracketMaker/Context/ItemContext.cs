@@ -2,7 +2,7 @@
 using BracketMaker.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace BracketMaker.ItemContext;
+namespace BracketMaker.Context;
 
 public class ItemContext : DbContext
 {
