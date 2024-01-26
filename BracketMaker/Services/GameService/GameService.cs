@@ -35,17 +35,22 @@ public class GameService : IGameService
 
     public (bool Success, string Message) JoinGroup(JoinRequest joinRequest)
     {
-          var gameExists = GameHosts.TryGetValue(joinRequest.GroupID, out var gameInfo);
-          if (!gameExists)
-              return (false, "Given game already exists");
-          if (gameInfo!.IsStarted)
-              return (false, "Given game already exists");
-          if (gameInfo.Players.Exists(p => p.UserName == joinRequest.UserName))
-              return (false, "Given game already exists");
-          if (!IsUserNameValid(joinRequest.UserName))
-              return (false, "Incorrect user name");
-          
-          return (true, "");
+        var gameExists = GameHosts.TryGetValue(joinRequest.GroupID, out var gameInfo);
+        if (!gameExists)
+          return (false, "Given game does not exists");
+        if (gameInfo!.IsStarted)
+          return (false, "Given game already exists");
+        if (gameInfo.Players.Exists(p => p.UserName == joinRequest.UserName))
+          return (false, "Username taken");
+        if (!IsUserNameValid(joinRequest.UserName))
+          return (false, "Incorrect user name");
+
+        gameInfo.Players.Add(new PlayerInfo
+        {
+            UserName = joinRequest.UserName
+        });
+        
+        return (true, "");
     }
 
     private static bool IsUserNameValid(string userName) =>

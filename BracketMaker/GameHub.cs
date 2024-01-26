@@ -9,12 +9,15 @@ public class GameHub(IGameService gameService) : Hub
 {
      public async Task CreateGroup(string roomName)
      {
+          gameService.GameHosts.Remove(Context.ConnectionId); 
+          
           var groupInfo = new GroupInfo
           {
                HostConnectionID = Context.ConnectionId,
                GroupID = Guid.NewGuid().ToString()
           };
-          gameService.GameHosts.Add(groupInfo.GroupID, new GameInfo{ HostConnectionID = Context.ConnectionId});
+          
+          gameService.GameHosts.Add(groupInfo.HostConnectionID, new GameInfo{ HostConnectionID = Context.ConnectionId});
           await Clients.Caller.SendAsync("onGroupCreated", groupInfo);
      }
 
@@ -66,6 +69,6 @@ public class GameHub(IGameService gameService) : Hub
                return;
           }
           var nextQuestionId = questionID++;
-          await Clients.Client(gameInfo!.HostConnectionID).SendAsync("nextQuestion", gameInfo.Questions[nextQuestionId]);
+          await Clients.Client(gameInfo!.HostConnectionID).SendAsync("nextQuestion", gameInfo.Questions[nextQuestionId], nextQuestionId);
      }
 }
