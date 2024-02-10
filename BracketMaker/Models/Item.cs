@@ -11,5 +11,5 @@ public class Item : IEntity
     [JsonIgnore]
     public Guid BracketId { get; set; }
     [JsonIgnore]
-    public Bracket Bracket { get; set; }
+    public Quiz Quiz { get; set; }
 }

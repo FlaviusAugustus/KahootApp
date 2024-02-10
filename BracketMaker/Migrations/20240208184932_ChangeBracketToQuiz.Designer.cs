@@ -3,6 +3,7 @@ using System;
 using BracketMaker.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BracketMaker.Migrations
 {
     [DbContext(typeof(Context.ItemContext))]
-    partial class ItemContextModelSnapshot : ModelSnapshot
+    [Migration("20240208184932_ChangeBracketToQuiz")]
+    partial class ChangeBracketToQuiz
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");

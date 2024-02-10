@@ -1,4 +1,5 @@
-﻿using BracketMaker.ItemContext.Configuration;
+﻿using BracketMaker.Context.Configuration;
+using BracketMaker.ItemContext.Configuration;
 using BracketMaker.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,7 +7,7 @@ namespace BracketMaker.Context;
 
 public class ItemContext : DbContext
 {
-    public DbSet<Bracket> Brackets { get; set; }
+    public DbSet<Quiz> Quizzes { get; set; }
     
     public ItemContext(DbContextOptions<ItemContext> options) : base(options) {}
 
@@ -18,7 +19,7 @@ public class ItemContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(BracketConfiguration).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(QuizConfiguration).Assembly);
         base.OnModelCreating(modelBuilder);
     }
 

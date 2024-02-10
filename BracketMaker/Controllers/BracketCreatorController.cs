@@ -1,4 +1,5 @@
 ﻿using BracketMaker.Models;
+using BracketMaker.Models.Mappings;
 using BracketMaker.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,7 +7,7 @@ namespace BracketMaker.Controllers;
 
 [ApiController]
 [Route("/api/[controller]")]
-public class BracketCreatorController(IGenericRepository<Bracket> bracketRepository) : ControllerBase
+public class BracketCreatorController(IGenericRepository<Quiz> bracketRepository) : ControllerBase
 {
     [HttpGet]
     [Route("get/{id:guid}")]
@@ -18,10 +19,10 @@ public class BracketCreatorController(IGenericRepository<Bracket> bracketReposit
 
     [HttpPost]
     [Route($"add/")]
-    public async Task<IActionResult> AddBracket(Bracket bracket)
+    public async Task<IActionResult> AddQuiz(QuizDto quizDto)
     {
-        bracketRepository.Add(bracket);
+        bracketRepository.Add(quizDto.ToQuiz());
         await bracketRepository.SaveAsync();
-        return Ok(bracket);
+        return Ok(quizDto);
     }
 }

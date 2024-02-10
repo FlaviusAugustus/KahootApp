@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BracketMaker.ItemContext.Configuration;
 
-public class ItemConfiguration : IEntityTypeConfiguration<Item>
+public class QuestionConfiguration : IEntityTypeConfiguration<Question>
 {
-    public void Configure(EntityTypeBuilder<Item> builder)
+    public void Configure(EntityTypeBuilder<Question> builder)
     {
         builder
-            .HasOne(i => i.Bracket)
-            .WithMany(b => b.Items)
-            .HasForeignKey(i => i.BracketId);
+            .HasOne(i => i.Quiz)
+            .WithMany(b => b.Questions)
+            .HasForeignKey(i => i.QuizId);
 
         builder
             .Property(i => i.Name)

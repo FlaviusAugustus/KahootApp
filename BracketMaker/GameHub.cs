@@ -48,6 +48,11 @@ public class GameHub(IGameService gameService) : Hub
           gameService.GameHosts.Remove(groupID);
      }
 
+     public void StartGame(string groupID)
+     {
+          gameService.GameHosts[groupID].IsStarted = true;
+     }
+
      public async Task SendScore(GameAnswer gameAnswer)
      {
           var isAnswerCorrect = gameService.ProcessAnswer(gameAnswer);
@@ -65,6 +70,6 @@ public class GameHub(IGameService gameService) : Hub
                return;
           }
           var nextQuestionId = questionID++;
-          await Clients.Client(gameInfo!.HostConnectionID).SendAsync("nextQuestion", gameInfo.Questions[nextQuestionId], nextQuestionId);
+          await Clients.Client(gameInfo!.HostConnectionID).SendAsync("nextQuestion", gameInfo.Quiz.Questions[nextQuestionId], nextQuestionId);
      }
 }

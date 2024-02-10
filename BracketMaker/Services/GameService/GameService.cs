@@ -22,7 +22,7 @@ public class GameService : IGameService
         var gameInfo = GameHosts[answer.GameID];
         
         var player = gameInfo.Players.Single(p => p.UserName == answer.UserName);
-        var question = gameInfo.Questions[answer.QuestionID];
+        var question = gameInfo.Quiz.Questions[answer.QuestionID];
 
         if ((question.Answer & answer.Answer) == 0)
         {
