@@ -1,11 +1,10 @@
-﻿using BracketMaker.Models;
+﻿using BracketMaker.ClientMethods;
+using BracketMaker.Models;
 using BracketMaker.Services;
-using LanguageExt;
-using LanguageExt.Pipes;
 using Microsoft.AspNetCore.SignalR;
 namespace BracketMaker;
 
-public class GameHub(IGameService gameService) : Hub
+public class GameHub(IGameService gameService) : Hub<IGameTypedHub>
 {
      public async Task CreateGroup(string roomName)
      {
@@ -18,7 +17,7 @@ public class GameHub(IGameService gameService) : Hub
           };
           
           gameService.GameHosts.Add(groupInfo.HostConnectionID, new GameInfo{ HostConnectionID = Context.ConnectionId});
-          await Clients.Caller.SendAsync("onGroupCreated", groupInfo);
+          await Clients.Caller.OnGroupCreated(groupInfo);
      }
 
      public async Task JoinGroup(string groupId, string userName)
@@ -33,14 +32,15 @@ public class GameHub(IGameService gameService) : Hub
           var joinResult = gameService.JoinGroup(joinRequest);
           if (!joinResult.Success)
           {
-               await Clients.Caller.SendAsync("failedToJoin", joinResult.Message);
+               await Clients.Caller.FailedToJoinGame(joinResult.Message);
                return;
           }
           
           var gameInfo = gameService.GameHosts[groupId];
           await Groups.AddToGroupAsync(Context.ConnectionId, groupId);
-          await Clients.Client(gameInfo!.HostConnectionID).SendAsync("playerJoined", userName);
-          await Clients.Caller.SendAsync("joinedGame", userName);
+          
+          await Clients.Client(gameInfo!.HostConnectionID).PlayerJoined(userName);
+          await Clients.Caller.GameJoined(userName);
      }
 
      public void StopGame(string groupID)
@@ -57,8 +57,9 @@ public class GameHub(IGameService gameService) : Hub
      {
           var isAnswerCorrect = gameService.ProcessAnswer(gameAnswer);
           var gameInfo = gameService.GameHosts[gameAnswer.GameID];
-          await Clients.Client(gameInfo.HostConnectionID).SendAsync("playerAnswered", isAnswerCorrect);
-          await Clients.Caller.SendAsync("answerResult", isAnswerCorrect);
+          
+          await Clients.Client(gameInfo.HostConnectionID).PlayerAnswered(isAnswerCorrect.ToString());
+          await Clients.Caller.ReceiveQuestionResult(isAnswerCorrect.ToString());
      }
 
      public async Task GetNextQuestion(string groupID, int questionID = -1)
@@ -66,10 +67,9 @@ public class GameHub(IGameService gameService) : Hub
           var gameExists = gameService.GameHosts.TryGetValue(groupID, out var gameInfo);
           if (!gameExists)
           {
-               await Clients.Caller.SendAsync("groupDoesNotExist", groupID);
                return;
           }
           var nextQuestionId = questionID++;
-          await Clients.Client(gameInfo!.HostConnectionID).SendAsync("nextQuestion", gameInfo.Quiz.Questions[nextQuestionId], nextQuestionId);
+          await Clients.Client(gameInfo!.HostConnectionID).NextQuestion(gameInfo.Quiz.Questions[nextQuestionId]);
      }
 }
