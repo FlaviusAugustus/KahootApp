@@ -7,6 +7,7 @@ import * as Router from "react-router-dom";
 import GamemodeComponent from "./Components/GamemodeComponent";
 import PlayerComponent from "./Components/PlayerComponent";
 import HostComponent from "./Components/HostComponent";
+import GameComponent from "./Components/GameComponent";
 
 const router = Router.createBrowserRouter([
     {
@@ -20,6 +21,10 @@ const router = Router.createBrowserRouter([
     {
         path: "/host",
         element: <HostComponent/>
+    },
+    {
+        path: "/game/:id",
+        element: <GameComponent/>
     }
 ]);
 

@@ -1,6 +1,8 @@
 ﻿import React, { useState, useEffect } from 'react';
 import * as signalr from '@microsoft/signalr';
 import useConnection from "../Hooks/useConnection";
+import isConnected from "../Utils/ConnectionUtils";
+import {useNavigate} from "react-router-dom";
 
 type GameInfo = {
     groupID: string,
@@ -10,33 +12,48 @@ type GameInfo = {
 const HostComponent = () => {
     const [connection, setConnection] = useConnection()
     const [gameInfo, setGameInfo] = useState<GameInfo>();
-    const [userNames, setUserNames] = useState<string[]>([])
+    const [userNames, setUserNames] = useState<string[]>([]);
+    const navigator = useNavigate();
     
-    const [started, setstarted] = useState<boolean>(false);
-
     useEffect(() => {
-        if(connection && !started) {
-            setstarted(true)
-            connection.start()
-                .then(res => {
-                    console.log('Connected');
-                    connection.on('onGroupCreated', groupInfo => {
-                        setGameInfo(groupInfo)
-                    });
-
-                    connection.on('playerJoined', userName  => {
-                        setUserNames(UserNames => [...UserNames, userName] );
-                    });
-                });
+        async function connectToHub(): Promise<void> {
+            if(!connection || isConnected(connection))
+                return
+            await connection.start();
+            
+            connection.on('onGroupCreated', groupInfo => {
+                let host = groupInfo.hostConnectionID;
+                let group = groupInfo.groupID;
+                let game: GameInfo = {
+                    groupID: group,
+                    HostConnectionID: host
+                };  
+                setGameInfo(game);
+            });
+            connection.on('playerJoined', userName => {
+                setUserNames(UserNames => [...UserNames, userName]);
+            });
         }
-    }, [connection, started, userNames]);
+        connectToHub();
+    }, [connection, userNames, setGameInfo]);
     
     const onClick = () => {
-        started && connection && connection.invoke("CreateGroup", "pokoj")
-    
+        connection && isConnected(connection) && connection.invoke("CreateGroup", "pokoj");
+        setUserNames([]);
     }
+    
+    const StartGameHandler = () => {
+        connection && isConnected(connection) && connection.invoke("StartGame", gameInfo?.HostConnectionID);
+        navigator(`/game/${gameInfo?.HostConnectionID}`, {
+            state: {
+                userNames: userNames, 
+                gameInfo: gameInfo
+        }});
+    }
+    
     return <div>
         <button onClick={onClick}>Create Group</button>
+        <button onClick={StartGameHandler}>Start game</button>
         To Join Input: {gameInfo && gameInfo.groupID}
         <div>{userNames.map((username) => <li>{username}</li>)}</div> 
     </div>

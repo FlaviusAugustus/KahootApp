@@ -1,22 +1,12 @@
-﻿import {useState} from "react";
-import HostComponent from "./HostComponent";
-import PlayerComponent from "./PlayerComponent";
-
-export {}
+﻿import { useNavigate } from 'react-router-dom';
 
 const GamemodeComponent = () => {
-    const [HostComponentChoosen, setHostComponentChosen] = useState<boolean>()
-    
-    const Onclick = (value: boolean) => {
-        setHostComponentChosen(value)
-    }
+    const navigate = useNavigate();
     
     return(
         <div>
-            <button onClick={() => Onclick(true)}>Host a Game</button>
-            <button onClick={() => Onclick(false)}>Join a Game</button>
-            {HostComponentChoosen && <HostComponent/>}
-            {!HostComponentChoosen && <PlayerComponent/>}
+            <button onClick={() => navigate('/host')}>Host a Game</button>
+            <button onClick={() => navigate('/join')}>Join a Game</button>
         </div>
     )
 }
