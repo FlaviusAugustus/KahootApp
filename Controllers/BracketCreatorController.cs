@@ -1,6 +1,7 @@
 ﻿using BracketMaker.Models;
 using BracketMaker.Models.Mappings;
 using BracketMaker.Repository;
+using BracketMaker.Repository.QuizRepository;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +9,7 @@ namespace BracketMaker.Controllers;
 
 [ApiController]
 [Route("/api/[controller]")]
-public class BracketCreatorController(IGenericRepository<Quiz> bracketRepository) : ControllerBase
+public class BracketCreatorController(IQuizRepository bracketRepository) : ControllerBase
 {
     [HttpGet]
     [Route("get/{id:guid}")]
@@ -40,6 +41,7 @@ public class BracketCreatorController(IGenericRepository<Quiz> bracketRepository
     [Route("get-tag/")]
     public async Task<IActionResult> GetByTags(IEnumerable<Tag> tags)
     {
-        return Ok();
+        var result = await bracketRepository.GetQuizzesWithOneTag(tags);
+        return Ok(result);
     }
 }
