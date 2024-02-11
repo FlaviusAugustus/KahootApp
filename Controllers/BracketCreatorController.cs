@@ -25,4 +25,13 @@ public class BracketCreatorController(IGenericRepository<Quiz> bracketRepository
         await bracketRepository.SaveAsync();
         return Ok(quizDto);
     }
+
+    [HttpGet]
+    [Route("page/")]
+    public async Task<IActionResult> GetQuizPage(int page, int pageSize)
+    {
+        return page < 0 || pageSize <= 0 ? 
+            BadRequest() :
+            Ok(await bracketRepository.GetPage(pageSize, page));
+    }
 }
