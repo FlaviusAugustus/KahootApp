@@ -17,5 +17,10 @@ public class QuizConfiguration :IEntityTypeConfiguration<Quiz>
             .Property(b => b.Name)
             .IsRequired()
             .HasMaxLength(32);
+
+        builder
+            .HasMany(q => q.Tags)
+            .WithMany(t => t.Quizzes)
+            .UsingEntity<QuizTag>();
     }
 }
