@@ -13,4 +13,6 @@ public interface IGenericRepository<TEntity>
     Task<TEntity?> GetByIdAsync(Guid id);
     Task<IEnumerable<TEntity>> GetAllAsync();
     Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> expression);
+
+    Task<IEnumerable<TEntity>> GetPage(int pageSize, int pageNumber);
 }

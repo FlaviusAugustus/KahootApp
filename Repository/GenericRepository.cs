@@ -42,4 +42,10 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
 
     public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> expression) =>
         await _context.Set<TEntity>().Where(expression).ToListAsync();
+
+    public async Task<IEnumerable<TEntity>> GetPage(int pageSize, int pageNumber) =>
+        await _context.Set<TEntity>()
+            .Skip(pageNumber * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
 }
