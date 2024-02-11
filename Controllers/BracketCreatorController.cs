@@ -1,6 +1,7 @@
 ﻿using BracketMaker.Models;
 using BracketMaker.Models.Mappings;
 using BracketMaker.Repository;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BracketMaker.Controllers;
@@ -33,5 +34,12 @@ public class BracketCreatorController(IGenericRepository<Quiz> bracketRepository
         return page < 0 || pageSize <= 0 ? 
             BadRequest() :
             Ok(await bracketRepository.GetPage(pageSize, page));
+    }
+
+    [HttpGet]
+    [Route("get-tag/")]
+    public async Task<IActionResult> GetByTags(IEnumerable<Tag> tags)
+    {
+        return Ok();
     }
 }
