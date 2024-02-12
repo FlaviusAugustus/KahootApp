@@ -35,7 +35,7 @@ public class UserService : IUserService
     public async Task<Result<Unit>> AddToRoleAsync(ManageRoleModel roleModel)
     {
         var user = await _userManager.FindByNameAsync(roleModel.UserName);
-        return await ManageRole(user, roleModel, AddUserToRole); 
+        return await ManageRole(user, roleModel, AddUserToRole);
     }
 
     private static async Task<Result<Unit>> ManageRole(User? user, ManageRoleModel roleModel, Func<User, Role, Task> roleManager)

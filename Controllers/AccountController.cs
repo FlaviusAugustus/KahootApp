@@ -38,8 +38,8 @@ public class AccountController(IUserService userService) : ControllerBase
     {
         var result = await userService.AddToRoleAsync(roleModel);
         return result.Match<IActionResult>(
-            success => Ok(),
-            fail => BadRequest(fail.Message)
+            success => Ok(success),
+            fail => result.IsBottom ? Ok() : BadRequest(fail.Message) // Temporary till i find a better fix
             );
     }
 
@@ -51,7 +51,7 @@ public class AccountController(IUserService userService) : ControllerBase
         var result = await userService.RemoveRoleAsync(roleModel);
         return result.Match<IActionResult>(
             success => Ok(),
-            fail => BadRequest(fail.Message)
+            fail => result.IsBottom ? Ok() : BadRequest(fail.Message) // Temporary till i find a better fix
         );
     }
 }
