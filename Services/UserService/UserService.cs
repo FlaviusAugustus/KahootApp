@@ -14,27 +14,28 @@ using QuizApi.Services.UserService;
 
 namespace BracketMaker.Services.UserService;
 
-public class UserService : IUserService
-{
-    private readonly UserManager<User> _userManager;
-    private readonly RoleManager<IdentityRole<Guid>> _roleManager;
-    private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly JWT _jwtConfig;
-
-    public UserService(UserManager<User> userManager,
+public class UserService(UserManager<User> userManager,
         RoleManager<IdentityRole<Guid>> roleManager, IOptions<JWT> jwt,
-        IDateTimeProvider dateTimeProvider) =>
-        (_userManager, _roleManager, _jwtConfig, _dateTimeProvider) = (userManager, roleManager, jwt.Value, dateTimeProvider);
+        IDateTimeProvider dateTimeProvider)
+    : IUserService
+{
+    private readonly RoleManager<IdentityRole<Guid>> _roleManager = roleManager;
+    private readonly JWT _jwtConfig = jwt.Value;
+
+    public async Task<IList<string>> GetUserRoles(User user) =>
+            await userManager.FindByNameAsync(user.UserName) is null ?
+                await userManager.GetRolesAsync(user) : 
+                Array.Empty<string>();
 
     public async Task<Result<Unit>> RemoveRoleAsync(ManageRoleModel roleModel)
     {
-        var user = await _userManager.FindByNameAsync(roleModel.UserName);
+        var user = await userManager.FindByNameAsync(roleModel.UserName);
         return await ManageRole(user, roleModel, RemoveUserFromRole);
     }
-    
+
     public async Task<Result<Unit>> AddToRoleAsync(ManageRoleModel roleModel)
     {
-        var user = await _userManager.FindByNameAsync(roleModel.UserName);
+        var user = await userManager.FindByNameAsync(roleModel.UserName);
         return await ManageRole(user, roleModel, AddUserToRole);
     }
 
@@ -57,30 +58,30 @@ public class UserService : IUserService
 
     private async Task RemoveUserFromRole(User user, Role role)
     {
-        if (await _userManager.IsInRoleAsync(user, role.ToString()))
+        if (await userManager.IsInRoleAsync(user, role.ToString()))
         {
-            await _userManager.RemoveFromRoleAsync(user, role.ToString());
+            await userManager.RemoveFromRoleAsync(user, role.ToString());
         }
     }
 
     private async Task AddUserToRole(User user, Role role)
     {
-        if (!await _userManager.IsInRoleAsync(user, role.ToString()))
+        if (!await userManager.IsInRoleAsync(user, role.ToString()))
         {
-            await _userManager.AddToRoleAsync(user, role.ToString());
+            await userManager.AddToRoleAsync(user, role.ToString());
         }
     }
 
     public async Task<Result<AuthModel>> GetTokenAsync(TokenRequestModel requestModel)
     {
-        var user = await _userManager.FindByEmailAsync(requestModel.Email);
+        var user = await userManager.FindByEmailAsync(requestModel.Email);
         if (user is null)
         {
             var noAccountError = new ArgumentException($"No accounts with Email: {requestModel.Email}");
             return new Result<AuthModel>(noAccountError);
         }
 
-        if (await _userManager.CheckPasswordAsync(user, requestModel.Password))
+        if (await userManager.CheckPasswordAsync(user, requestModel.Password))
         {
             var token = await CreateTokenForUser(user);
             return new Result<AuthModel>(token);
@@ -92,7 +93,7 @@ public class UserService : IUserService
 
     private async Task<AuthModel> CreateTokenForUser(User user)
     {
-        var roles = await _userManager.GetRolesAsync(user);
+        var roles = await userManager.GetRolesAsync(user);
         return new AuthModel
         {
             IsAuthenticated = true,
@@ -108,7 +109,7 @@ public class UserService : IUserService
         var claims = await CreateClaims(user);
         var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.Key));
         var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256Signature);
-        var expires = _dateTimeProvider.GetCurrentTime().AddMinutes(_jwtConfig.DurationInMinutes);
+        var expires = dateTimeProvider.GetCurrentTime().AddMinutes(_jwtConfig.DurationInMinutes);
 
         return new JwtSecurityToken(
             issuer: _jwtConfig.Issuer,
@@ -120,8 +121,8 @@ public class UserService : IUserService
 
     private async Task<IEnumerable<Claim>> CreateClaims(User user)
     {
-        var userClaims = await _userManager.GetClaimsAsync(user);
-        var roles = await _userManager.GetRolesAsync(user);
+        var userClaims = await userManager.GetClaimsAsync(user);
+        var roles = await userManager.GetRolesAsync(user);
         var roleClaims = roles.Select(j => new Claim("roles", j));
 
         var claims = new[]
@@ -139,7 +140,7 @@ public class UserService : IUserService
         {
             UserName = registerModel.UserName,
             Email = registerModel.Email,
-            CreatedAt = _dateTimeProvider.GetCurrentTime(),
+            CreatedAt = dateTimeProvider.GetCurrentTime(),
         };
         if (await IsUserDataTaken(user))
         {
@@ -147,7 +148,7 @@ public class UserService : IUserService
             return new Result<User>(credentialsError);
         }
         
-        var result = await _userManager.CreateAsync(user, registerModel.Password);
+        var result = await userManager.CreateAsync(user, registerModel.Password);
         await AddUserToRole(user, Role.User);
         if (result.Succeeded)
         {
@@ -160,7 +161,7 @@ public class UserService : IUserService
 
     private async Task<bool> IsUserDataTaken(User user)
     {
-        var sameEmail = await  _userManager.FindByEmailAsync(user.Email);
+        var sameEmail = await  userManager.FindByEmailAsync(user.Email);
         return sameEmail is not null;
     }
 }

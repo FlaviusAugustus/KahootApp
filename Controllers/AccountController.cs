@@ -31,6 +31,16 @@ public class AccountController(IUserService userService) : ControllerBase
             );
     }
 
+    [HttpGet]
+    [Route("get-roles")]
+    [Authorize]
+    public async Task<IActionResult> GetUserRoles(User user)
+    {
+        var roles = await userService.GetUserRoles(user);
+        return Ok(roles);
+    }
+        
+
     [HttpPost]
     [Route("add-role")]
     [Authorize] // TODO: Add policies
