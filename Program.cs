@@ -12,12 +12,40 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using QuizApi.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// swagger
+builder.Services.AddSwaggerGen(opts =>
+{
+    var jwtSecurityScheme = new OpenApiSecurityScheme
+    {
+        Description = "Enter only the jwt",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        BearerFormat = "JWT", 
+                
+        Reference = new OpenApiReference
+        {
+            Id = JwtBearerDefaults.AuthenticationScheme,
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+            
+    //opts.SwaggerDoc("V1", new OpenApiInfo { Title = "Quiz Api" , Version = "V1"});
+    opts.AddSecurityDefinition("Bearer", jwtSecurityScheme);
+
+    opts.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { jwtSecurityScheme, new List<string>() }
+    });
+});
 
 builder.Services.AddSingleton<IGameService, GameService>();
 builder.Services.AddDbContext<ItemContext>(opts =>
