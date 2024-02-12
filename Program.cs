@@ -1,5 +1,6 @@
 using System.Text;
 using BracketMaker;
+using BracketMaker.AppConfigurationExtensions;
 using BracketMaker.Constants;
 using BracketMaker.Context;
 using BracketMaker.Models;
@@ -19,91 +20,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 
-// swagger
-builder.Services.AddSwaggerGen(opts =>
-{
-    var jwtSecurityScheme = new OpenApiSecurityScheme
-    {
-        Description = "Enter only the jwt",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Scheme = JwtBearerDefaults.AuthenticationScheme,
-        BearerFormat = "JWT", 
-                
-        Reference = new OpenApiReference
-        {
-            Id = JwtBearerDefaults.AuthenticationScheme,
-            Type = ReferenceType.SecurityScheme
-        }
-    };
-            
-    //opts.SwaggerDoc("V1", new OpenApiInfo { Title = "Quiz Api" , Version = "V1"});
-    opts.AddSecurityDefinition("Bearer", jwtSecurityScheme);
+builder.Services.ConfigureSwagger();
 
-    opts.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        { jwtSecurityScheme, new List<string>() }
-    });
-});
+builder.Services.ConfigureDatabase(builder.Configuration);
 
-builder.Services.AddSingleton<IGameService, GameService>();
-builder.Services.AddDbContext<ItemContext>(opts =>
-{
-    opts.UseSqlite(builder.Configuration.GetConnectionString("database"));
-});
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); 
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddIdentity<User, IdentityRole<Guid>>().AddEntityFrameworkStores<ItemContext>();
-builder.Services.Configure<IdentityOptions>(opts =>
-{
-    opts.Password.RequireDigit = false;
-    opts.Password.RequiredLength = 0;
-    opts.Password.RequireLowercase = false;
-    opts.Password.RequireUppercase = false;
-    opts.Password.RequiredUniqueChars = 0;
-    opts.Password.RequireNonAlphanumeric = false;
-});
 
-//jwt
-builder.Services.AddAuthentication(opts =>
-    {
-        opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(opts =>
-    {
-        opts.RequireHttpsMetadata = false;
-        opts.SaveToken = false;
-        opts.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero,
+builder.Services.ConfigureIdentity();
 
-            ValidIssuer = builder.Configuration["JWTConfig:Issuer"],
-            ValidAudience = builder.Configuration["JWTConfig:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTConfig:Key"]))
-        };
-    });
+builder.Services.ConfigureJwtAuth(builder.Configuration);
 
-builder.Services.Configure<JWT>(builder.Configuration.GetSection(JWT.JWTConfig));
-
-// roles
-var roleManager = builder.Services.BuildServiceProvider().GetRequiredService<RoleManager<IdentityRole<Guid>>>();
-foreach (var role in Enum.GetNames<Role>())
-{
-    if (!await roleManager.RoleExistsAsync(role))
-    {
-        await roleManager.CreateAsync(new IdentityRole<Guid>(role));
-    }
-}
 
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {

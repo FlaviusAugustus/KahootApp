@@ -30,7 +30,6 @@ public class UserService(UserManager<User> userManager,
             Array.Empty<string>();
     }
 
-
     public async Task<Result<Unit>> RemoveRoleAsync(ManageRoleModel roleModel)
     {
         var user = await userManager.FindByNameAsync(roleModel.UserName);

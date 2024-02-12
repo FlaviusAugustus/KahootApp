@@ -1,4 +1,6 @@
-﻿using BracketMaker.Context.Configuration;
+﻿using BracketMaker.AppConfigurationExtensions;
+using BracketMaker.Constants;
+using BracketMaker.Context.Configuration;
 using BracketMaker.ItemContext.Configuration;
 using BracketMaker.Models;
 using Microsoft.AspNetCore.Identity;
@@ -24,5 +26,4 @@ public class ItemContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(QuizConfiguration).Assembly);
         base.OnModelCreating(modelBuilder);
     }
-
 }
