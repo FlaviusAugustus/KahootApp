@@ -1,11 +1,13 @@
 ﻿using BracketMaker.Context.Configuration;
 using BracketMaker.ItemContext.Configuration;
 using BracketMaker.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BracketMaker.Context;
 
-public class ItemContext : DbContext
+public class ItemContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
     public DbSet<Quiz> Quizzes { get; set; }
     
