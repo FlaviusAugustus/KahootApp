@@ -1,3 +1,4 @@
+using BracketMaker.Constants;
 using BracketMaker.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ public class AccountController(IUserService userService) : ControllerBase
 
     [HttpGet]
     [Route("get-roles")]
-    [Authorize]
+    [Authorize(Policy = nameof(Policy.CanSeeUserRoles))]
     public async Task<IActionResult> GetUserRoles(string userName)
     {
         var roles = await userService.GetUserRoles(userName);
@@ -42,7 +43,7 @@ public class AccountController(IUserService userService) : ControllerBase
 
     [HttpPost]
     [Route("add-role")]
-    [Authorize] // TODO: Add policies
+    [Authorize(Policy = nameof(Policy.CanManageRoles))] 
     public async Task<IActionResult> AddToRole(ManageRoleModel roleModel)
     {
         var result = await userService.AddToRoleAsync(roleModel);
@@ -54,7 +55,7 @@ public class AccountController(IUserService userService) : ControllerBase
 
     [HttpPost]
     [Route("remove-role")]
-    [Authorize] // TODO: Add policies
+    [Authorize(Policy = nameof(Policy.CanManageRoles))] 
     public async Task<IActionResult> RemoveRole(ManageRoleModel roleModel)
     {
         var result = await userService.RemoveRoleAsync(roleModel);

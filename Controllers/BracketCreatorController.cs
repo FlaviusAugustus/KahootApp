@@ -1,7 +1,9 @@
-﻿using BracketMaker.Models;
+﻿using BracketMaker.Constants;
+using BracketMaker.Models;
 using BracketMaker.Models.Mappings;
 using BracketMaker.Repository;
 using BracketMaker.Repository.QuizRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +23,7 @@ public class BracketCreatorController(IQuizRepository bracketRepository) : Contr
 
     [HttpPost]
     [Route($"add/")]
+    [Authorize(Policy = nameof(Policy.CanManageOwnQuizzes))]
     public async Task<IActionResult> AddQuiz(QuizDto quizDto)
     {
         bracketRepository.Add(quizDto.ToQuiz());

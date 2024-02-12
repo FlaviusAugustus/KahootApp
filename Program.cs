@@ -1,19 +1,7 @@
-using System.Text;
 using BracketMaker;
 using BracketMaker.AppConfigurationExtensions;
-using BracketMaker.Constants;
-using BracketMaker.Context;
-using BracketMaker.Models;
-using BracketMaker.Repository;
-using BracketMaker.Services;
 using BracketMaker.Services.DateTimeProvider;
 using BracketMaker.Services.UserService;
-using BracketMaker.Settings;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using QuizApi.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,8 +20,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.ConfigureIdentity();
 
-builder.Services.ConfigureJwtAuth(builder.Configuration);
+builder.Services.ConfigureAuthorization();
 
+builder.Services.ConfigureJwtAuth(builder.Configuration);
 
 builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
 {
