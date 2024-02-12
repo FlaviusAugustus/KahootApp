@@ -34,12 +34,11 @@ public class AccountController(IUserService userService) : ControllerBase
     [HttpGet]
     [Route("get-roles")]
     [Authorize]
-    public async Task<IActionResult> GetUserRoles(User user)
+    public async Task<IActionResult> GetUserRoles(string userName)
     {
-        var roles = await userService.GetUserRoles(user);
+        var roles = await userService.GetUserRoles(userName);
         return Ok(roles);
     }
-        
 
     [HttpPost]
     [Route("add-role")]

@@ -22,10 +22,14 @@ public class UserService(UserManager<User> userManager,
     private readonly RoleManager<IdentityRole<Guid>> _roleManager = roleManager;
     private readonly JWT _jwtConfig = jwt.Value;
 
-    public async Task<IList<string>> GetUserRoles(User user) =>
-            await userManager.FindByNameAsync(user.UserName) is null ?
-                await userManager.GetRolesAsync(user) : 
-                Array.Empty<string>();
+    public async Task<IList<string>> GetUserRoles(string userName)
+    {
+        var user = await userManager.FindByNameAsync(userName);
+        return user is not null ?
+            await userManager.GetRolesAsync(user) : 
+            Array.Empty<string>();
+    }
+
 
     public async Task<Result<Unit>> RemoveRoleAsync(ManageRoleModel roleModel)
     {

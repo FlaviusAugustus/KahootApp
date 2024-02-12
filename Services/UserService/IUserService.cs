@@ -10,5 +10,5 @@ public interface IUserService
     Task<Result<AuthModel>> GetTokenAsync(TokenRequestModel requestModel);
     Task<Result<Unit>> AddToRoleAsync(ManageRoleModel roleModel);
     Task<Result<Unit>> RemoveRoleAsync(ManageRoleModel roleModel);
-    Task<IList<string>> GetUserRoles(User user);
+    Task<IList<string>> GetUserRoles(string userName);
 }
