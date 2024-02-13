@@ -7,7 +7,7 @@ using QuizApi.Services.UserService;
 namespace BracketMaker.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AccountController(IUserService userService) : ControllerBase
 {
     [HttpPost]
@@ -33,7 +33,7 @@ public class AccountController(IUserService userService) : ControllerBase
     }
 
     [HttpGet]
-    [Route("get-roles")]
+    [Route("get-user-roles")]
     [Authorize(Policy = nameof(Policy.CanSeeUserRoles))]
     public async Task<IActionResult> GetUserRoles(string userName)
     {
@@ -42,7 +42,7 @@ public class AccountController(IUserService userService) : ControllerBase
     }
 
     [HttpPost]
-    [Route("add-role")]
+    [Route("add-user-role")]
     [Authorize(Policy = nameof(Policy.CanManageRoles))] 
     public async Task<IActionResult> AddToRole(ManageRoleModel roleModel)
     {
@@ -54,7 +54,7 @@ public class AccountController(IUserService userService) : ControllerBase
     }
 
     [HttpPost]
-    [Route("remove-role")]
+    [Route("remove-user-role")]
     [Authorize(Policy = nameof(Policy.CanManageRoles))] 
     public async Task<IActionResult> RemoveRole(ManageRoleModel roleModel)
     {
