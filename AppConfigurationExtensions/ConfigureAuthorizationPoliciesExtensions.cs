@@ -1,3 +1,4 @@
+using BracketMaker.AuthHandlers.Requirements;
 using BracketMaker.Constants;
 
 namespace BracketMaker.AppConfigurationExtensions;
@@ -15,7 +16,7 @@ public static class ConfigureAuthorizationPoliciesExtensions
             options.AddPolicy(nameof(Policy.CanSeeUserRoles),
                 policy => policy.RequireRole("Moderator", "Admin"));
             options.AddPolicy(nameof(Policy.CanManageOwnQuizzes),
-                policy => policy.RequireRole("User", "Admin", "Moderator"));
+                policy => policy.Requirements.Add(new CanDeleteQuizRequirement()));
             options.AddPolicy(nameof(Policy.CanManageQuizzesGlobally),
                 policy => policy.RequireRole("Moderator", "Admin"));
         });
