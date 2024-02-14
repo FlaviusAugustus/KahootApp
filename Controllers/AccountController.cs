@@ -44,7 +44,7 @@ public class AccountController(IUserService userService) : ControllerBase
     [HttpPost]
     [Route("add-user-role")]
     [Authorize(Policy = nameof(Policy.CanManageRoles))] 
-    public async Task<IActionResult> AddToRole(ManageRoleModel roleModel)
+    public async Task<IActionResult> AddUserToRole(ManageRoleModel roleModel)
     {
         var result = await userService.AddToRoleAsync(roleModel);
         return result.Match<IActionResult>(
@@ -56,7 +56,7 @@ public class AccountController(IUserService userService) : ControllerBase
     [HttpPost]
     [Route("remove-user-role")]
     [Authorize(Policy = nameof(Policy.CanManageRoles))] 
-    public async Task<IActionResult> RemoveRole(ManageRoleModel roleModel)
+    public async Task<IActionResult> RemoveUserFromRole(ManageRoleModel roleModel)
     {
         var result = await userService.RemoveRoleAsync(roleModel);
         return result.Match<IActionResult>(
