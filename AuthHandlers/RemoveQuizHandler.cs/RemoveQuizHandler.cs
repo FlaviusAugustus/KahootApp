@@ -9,8 +9,6 @@ public class RemoveQuizHandler : AuthorizationHandler<CanDeleteQuizRequirement, 
     protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
         CanDeleteQuizRequirement requirement, Quiz quiz)
     {
-        context.Succeed(requirement);
-        return Task.CompletedTask;
         if (context.User.IsInRole(nameof(Role.Moderator)) ||
             context.User.IsInRole(nameof(Role.Admin)))
         {
