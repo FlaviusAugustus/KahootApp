@@ -1,4 +1,5 @@
 using BracketMaker.Repository;
+using BracketMaker.Repository.QuizRepository;
 using BracketMaker.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,5 +15,6 @@ public static class ConfigureDatabaseExtensions
             opts.UseSqlite(config.GetConnectionString("database"));
         });
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); 
+        services.AddScoped<IQuizRepository, QuizRepository>(); 
     }
 }
