@@ -2,6 +2,7 @@ using BracketMaker;
 using BracketMaker.AppConfigurationExtensions;
 using BracketMaker.AuthHandlers.Requirements;
 using BracketMaker.Services.DateTimeProvider;
+using BracketMaker.Services.QuizService;
 using BracketMaker.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
 using QuizApi.Services.UserService;
@@ -23,6 +24,8 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IQuizService, QuizService>();
 
 builder.Services.ConfigureAuthorization();
 
