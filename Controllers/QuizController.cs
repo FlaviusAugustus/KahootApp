@@ -38,6 +38,16 @@ public class QuizController(IQuizService quizService) : ControllerBase
             success => success == Guid.Empty ? NotFound() : Ok(),
             fail => Forbid(fail.Message));
     }
+    
+    [HttpPost]
+    [Route("update/")]
+    public async Task<IActionResult> UpdateQuiz(QuizDto quiz)
+    {
+        var result = await quizService.Update(User, quiz);
+        return result.Match<IActionResult>(
+            success => success is null ? NotFound() : Ok(),
+            fail => Forbid(fail.Message));
+    }
 
     [HttpGet]
     [Route("page/")]
