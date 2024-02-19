@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace BracketMaker.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
-public class BracketCreatorController(IQuizRepository bracketRepository) : ControllerBase
+[Route("/api/quiz")]
+public class QuizController(IQuizRepository bracketRepository) : ControllerBase
 {
     [HttpGet]
     [Route("get/{id:guid}")]
