@@ -8,16 +8,12 @@ public class GameHub(IGameService gameService) : Hub<IGameTypedHub>
 {
      public async Task CreateGroup(string roomName)
      {
-          gameService.GameHosts.Remove(Context.ConnectionId); 
-          
-          var groupInfo = new GroupInfo
+          gameService.AddGame(Context.ConnectionId);
+          await Clients.Caller.OnGroupCreated(new GroupInfo
           {
-               HostConnectionID = Context.ConnectionId,
-               GroupID = Guid.NewGuid().ToString()
-          };
-          
-          gameService.GameHosts.Add(groupInfo.HostConnectionID, new GameInfo{ HostConnectionID = Context.ConnectionId});
-          await Clients.Caller.OnGroupCreated(groupInfo);
+               HostConnectionID = Context.ConnectionId, 
+               GroupID = gameService.GenerateGroupID()
+          });
      }
 
      public async Task JoinGroup(string groupId, string userName)
@@ -36,27 +32,27 @@ public class GameHub(IGameService gameService) : Hub<IGameTypedHub>
                return;
           }
           
-          var gameInfo = gameService.GameHosts[groupId];
           await Groups.AddToGroupAsync(Context.ConnectionId, groupId);
-          
-          await Clients.Client(gameInfo!.HostConnectionID).PlayerJoined(userName);
+
+          var hostConnectionId = gameService.GetHost(groupId);
+          await Clients.Client(hostConnectionId).PlayerJoined(userName);
           await Clients.Caller.GameJoined(userName);
      }
 
      public void StopGame(string groupID)
      {
-          gameService.GameHosts.Remove(groupID);
+          gameService.RemoveGame(groupID);
      }
 
      public void StartGame(string groupID)
      {
-          gameService.GameHosts[groupID].IsStarted = true;
+          gameService.StartGame(groupID);
      }
 
      public async Task SendScore(GameAnswer gameAnswer)
      {
           var isAnswerCorrect = gameService.ProcessAnswer(gameAnswer);
-          var gameInfo = gameService.GameHosts[gameAnswer.GameID];
+          var gameInfo = gameService.GetGameState(gameAnswer.GameID);
           
           await Clients.Client(gameInfo.HostConnectionID).PlayerAnswered(isAnswerCorrect.ToString());
           await Clients.Caller.ReceiveQuestionResult(isAnswerCorrect.ToString());

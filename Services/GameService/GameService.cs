@@ -7,15 +7,54 @@ namespace BracketMaker.Services;
 public class GameService : IGameService
 {
     public Dictionary<string, GameInfo> GameHosts { get; init; } = new();
-    
-    public string GenerateGroupID()
+    private object _locker = new();
+
+    public void AddGame(string connectionId)
     {
-        var roomId = Guid.NewGuid()
+        lock (_locker)
+        {
+            GameHosts.Remove(connectionId);
+            GameHosts.Add(connectionId, new GameInfo {HostConnectionID = connectionId});
+        }
+    }
+
+    public GameInfo GetGameState(string connectionId)
+    {
+        var gameState = GameHosts[connectionId];
+        return new GameInfo
+        {
+            HostConnectionID = gameState.HostConnectionID,
+            IsStarted = gameState.IsStarted,
+            Players = new List<PlayerInfo>(gameState.Players),
+            Quiz = new Quiz
+            {
+
+            }
+        };
+    }
+
+    public void StartGame(string connectionId)
+    {
+        lock (_locker)
+            GameHosts[connectionId].IsStarted = true;
+    }
+
+    public void RemoveGame(string groupId)
+    {
+        lock (_locker)
+        {
+            GameHosts.Remove(groupId);
+        }
+    }
+
+    public string GetHost(string groupId) =>
+        GameHosts[groupId].HostConnectionID;
+    
+    public string GenerateGroupID() =>
+        Guid.NewGuid()
            .ToString("n")
            .Take(8)
            .ToString()!;
-        return roomId;
-    }
 
     public bool ProcessAnswer(GameAnswer answer)
     {
