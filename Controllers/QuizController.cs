@@ -22,14 +22,14 @@ public class QuizController(IQuizService quizService) : ControllerBase
 
     [HttpPost]
     [Route($"add/")]
-    [Authorize(Policy = nameof(Policy.CanManageOwnQuizzes))]
+    [Authorize(Policy = nameof(Policy.CanManageQuizzesGlobally))]
     public async Task<IActionResult> AddQuiz(QuizDto quizDto)
     {
         await quizService.Add(quizDto);
         return Ok(quizDto);
     }
 
-    [HttpPost]
+    [HttpDelete]
     [Route("remove/")]
     public async Task<IActionResult> RemoveQuiz(Guid id)
     {
@@ -39,7 +39,7 @@ public class QuizController(IQuizService quizService) : ControllerBase
             fail => Forbid(fail.Message));
     }
     
-    [HttpPost]
+    [HttpPut]
     [Route("update/")]
     public async Task<IActionResult> UpdateQuiz(QuizDto quiz)
     {
@@ -57,6 +57,24 @@ public class QuizController(IQuizService quizService) : ControllerBase
         return result.Match<IActionResult>(
             success => Ok(success),
             fail => NotFound(fail.Message));
+    }
+
+    [HttpGet]
+    [Route("get-virtualize")]
+    public async Task<IActionResult> GetVirtualize(int startIndex, int count)
+    {
+        var result = await quizService.GetVirtualize(startIndex, count);
+        return result.Match<IActionResult>(
+            success => Ok(success),
+            fail => NotFound(fail.Message));
+    }
+
+    [HttpGet]
+    [Route("count")]
+    public async Task<IActionResult> GetCount()
+    {
+        var count = await quizService.GetCount();
+        return Ok(count);
     }
 
     [HttpGet]

@@ -14,4 +14,7 @@ public interface IQuizService
     Task<Result<IEnumerable<QuizDto>>> GetPage(int page, int pageSize);
     Task<IEnumerable<QuizDto>> MatchAnyTag(IEnumerable<Tag> tags);
     Task<IEnumerable<QuizDto>> MatchAllTags(IEnumerable<Tag> tags);
+    Task<Result<IEnumerable<Quiz>>> GetVirtualize(int startIndex, int count);
+
+    Task<int> GetCount();
 }

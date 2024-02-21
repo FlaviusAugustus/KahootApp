@@ -70,4 +70,19 @@ public class QuizService(IQuizRepository quizRepository,
 
     public async Task<IEnumerable<QuizDto>> MatchAllTags(IEnumerable<Tag> tags) =>
         await quizRepository.GetQuizzesWithAllTags(tags);
+
+    public async Task<Result<IEnumerable<Quiz>>> GetVirtualize(int startIndex, int count)
+    {
+        if (startIndex < 0 || count < 0)
+        {
+            var exception = new ArgumentException("Incorrect arguments for virtualize");
+            return new Result<IEnumerable<Quiz>>(exception);
+        }
+
+        var items = await quizRepository.GetVirtualize(startIndex, count);
+        return new Result<IEnumerable<Quiz>>(items);
+    }
+
+    public Task<int> GetCount() =>
+        quizRepository.GetItemCount();
 }

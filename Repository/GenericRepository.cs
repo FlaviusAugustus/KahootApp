@@ -45,7 +45,18 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity>
 
     public async Task<IEnumerable<TEntity>> GetPage(int pageSize, int pageNumber) =>
         await _context.Set<TEntity>()
+            .OrderBy(e => e.CreatedAt)
             .Skip(pageNumber * pageSize)
             .Take(pageSize)
             .ToListAsync();
+
+    public async Task<IEnumerable<TEntity>> GetVirtualize(int startIndex, int count) =>
+        await _context.Set<TEntity>()
+            .OrderBy(e => e.CreatedAt)
+            .Skip(startIndex)
+            .Take(count)
+            .ToListAsync();
+
+    public async Task<int> GetItemCount() =>
+        await _context.Set<TEntity>().CountAsync();
 }

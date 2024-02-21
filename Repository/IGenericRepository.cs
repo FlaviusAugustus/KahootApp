@@ -15,4 +15,7 @@ public interface IGenericRepository<TEntity>
     Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> expression);
 
     Task<IEnumerable<TEntity>> GetPage(int pageSize, int pageNumber);
+    Task<IEnumerable<TEntity>> GetVirtualize(int startIndex, int count);
+
+    Task<int> GetItemCount();
 }
