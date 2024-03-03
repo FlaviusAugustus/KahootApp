@@ -53,7 +53,7 @@ public class AccountController(IUserService userService) : ControllerBase
             );
     }
 
-    [HttpPost]
+    [HttpDelete]
     [Route("remove-user-role")]
     [Authorize(Policy = nameof(Policy.CanManageRoles))] 
     public async Task<IActionResult> RemoveUserFromRole(ManageRoleModel roleModel)
