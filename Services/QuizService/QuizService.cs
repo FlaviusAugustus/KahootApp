@@ -25,6 +25,12 @@ public class QuizService(IQuizRepository quizRepository,
         await quizRepository.SaveAsync();
     }
 
+    public async Task AddRange(IEnumerable<QuizDto> quizzes)
+    {
+        await quizRepository.AddRange(quizzes.Select(q => q.ToQuiz()));
+        await quizRepository.SaveAsync();
+    }
+
     public async Task<Result<Guid>> Remove(ClaimsPrincipal user, Guid id)
     {
         var quiz = await quizRepository.GetByIdAsync(id);

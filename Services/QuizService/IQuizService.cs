@@ -9,6 +9,7 @@ public interface IQuizService
 {
     Task<Result<QuizDto>> GetById(Guid quizId);
     Task Add(QuizDto quiz);
+    Task AddRange(IEnumerable<QuizDto> quizzes);
     Task<Result<Guid>> Remove(ClaimsPrincipal user, Guid quizId);
     Task<Result<QuizDto>> Update(ClaimsPrincipal user, QuizDto quiz);
     Task<Result<IEnumerable<QuizDto>>> GetPage(int page, int pageSize);

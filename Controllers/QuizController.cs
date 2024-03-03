@@ -29,6 +29,15 @@ public class QuizController(IQuizService quizService) : ControllerBase
         return Ok(quizDto);
     }
 
+    [HttpPost]
+    [Route("add-range")]
+    [Authorize(Policy = nameof(Policy.CanManageQuizzesGlobally))]
+    public async Task<IActionResult> AddRange(IEnumerable<QuizDto> quizzes)
+    {
+        await quizService.AddRange(quizzes);
+        return Ok(quizzes);
+    }
+
     [HttpDelete]
     [Route("remove/")]
     public async Task<IActionResult> RemoveQuiz(Guid id)

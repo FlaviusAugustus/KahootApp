@@ -6,6 +6,8 @@ public interface IGenericRepository<TEntity>
     where TEntity : class, IEntity
 {
     void Add(TEntity entity);
+
+    Task AddRange(IEnumerable<TEntity> entities);
     void Update(TEntity entity);
     void Remove(TEntity entity);
     Task RemoveByIdAsync(Guid id);

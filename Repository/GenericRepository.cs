@@ -5,16 +5,16 @@ using BracketMaker;
 
 namespace BracketMaker.Repository;
 
-public class GenericRepository<TEntity> : IGenericRepository<TEntity>
+public class GenericRepository<TEntity>(Context.ItemContext context) : IGenericRepository<TEntity>
     where TEntity : class, IEntity
 {
-    protected readonly Context.ItemContext _context;
-    
-    public GenericRepository(Context.ItemContext context) =>
-        _context = context;
+    protected readonly Context.ItemContext _context = context;
 
     public void Add(TEntity entity) =>
         _context.Set<TEntity>().Add(entity);
+
+    public async Task AddRange(IEnumerable<TEntity> entities) =>
+        await _context.Set<TEntity>().AddRangeAsync(entities);
 
     public void Update(TEntity entity) =>
         _context.Set<TEntity>().Update(entity);
