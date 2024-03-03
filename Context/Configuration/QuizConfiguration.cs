@@ -14,7 +14,7 @@ public class QuizConfiguration :IEntityTypeConfiguration<Quiz>
             .HasForeignKey(i => i.QuizId);
 
         builder
-            .Property(b => b.Name)
+            .Property(b => b.Title)
             .IsRequired()
             .HasMaxLength(32);
 

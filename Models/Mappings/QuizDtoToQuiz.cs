@@ -6,7 +6,9 @@ public static class QuizDtoToQuiz
     {
         var quiz = new Quiz
         {
-            Name = quizDto.Name,
+            Title = quizDto.Title,
+            Description = quizDto.Description,
+            ImageUrl = quizDto.ImageUrl,
             CreatedAt = DateTime.Now
         };
         

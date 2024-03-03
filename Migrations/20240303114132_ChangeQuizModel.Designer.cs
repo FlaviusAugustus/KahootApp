@@ -3,6 +3,7 @@ using System;
 using BracketMaker.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BracketMaker.Migrations
 {
     [DbContext(typeof(Context.ItemContext))]
-    partial class ItemContextModelSnapshot : ModelSnapshot
+    [Migration("20240303114132_ChangeQuizModel")]
+    partial class ChangeQuizModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -24,6 +27,7 @@ namespace BracketMaker.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Answer")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Correct")
@@ -52,6 +56,7 @@ namespace BracketMaker.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ImageUrl")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("QuizId")
@@ -213,14 +218,14 @@ namespace BracketMaker.Migrations
                         {
                             Id = new Guid("62e661b4-0ce0-4e83-a8f6-1925b3acae87"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f286af4f-05a6-4559-a2ca-2ef5cf3bc69c",
+                            ConcurrencyStamp = "f60e43cf-88c9-4d08-8ad6-a9f7f4b763bf",
                             CreatedAt = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             Email = "Admin@email.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEL3k5H1S3gYxkk5v7xr4UzT43qYvcpxUlWYbB62grf5bTH9G+6onO2xXYhMsbc/dZg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMpG0ybHApH62YNWAkDJOyuHus9tWFuZ1860bGQHeA+cCfxcN5GgtSRzXjuJdtqzCQ==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "Admin"

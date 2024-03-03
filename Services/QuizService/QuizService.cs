@@ -11,12 +11,12 @@ namespace BracketMaker.Services.QuizService;
 public class QuizService(IQuizRepository quizRepository,
     IAuthorizationService authService) : IQuizService
 {
-    public async Task<Result<QuizDto>> GetById(Guid id)
+    public async Task<Result<Quiz>> GetById(Guid id)
     {
         var quiz = await quizRepository.GetByIdAsync(id);
         return quiz is null ? 
-            new Result<QuizDto>(new ArgumentException("No such quiz exists")) :
-            new Result<QuizDto>(quiz.ToDto());
+            new Result<Quiz>(new ArgumentException("No such quiz exists")) :
+            new Result<Quiz>(quiz);
     }
 
     public async Task Add(QuizDto quiz)
@@ -41,8 +41,8 @@ public class QuizService(IQuizRepository quizRepository,
         return await ManageQuiz<Guid>(user, quiz, quizRepository.Remove);
     }
 
-    public async Task<Result<QuizDto>> Update(ClaimsPrincipal user, QuizDto quizDto) => 
-        await ManageQuiz<QuizDto>(user, quizDto.ToQuiz(), quizRepository.Update);
+    public async Task<Result<Quiz>> Update(ClaimsPrincipal user, QuizDto quizDto) => 
+        await ManageQuiz<Quiz>(user, quizDto.ToQuiz(), quizRepository.Update);
 
     private async Task<Result<T>> ManageQuiz<T>(ClaimsPrincipal user, Quiz quiz,
         Action<Quiz> quizManager)
@@ -59,22 +59,22 @@ public class QuizService(IQuizRepository quizRepository,
         return new Result<T>();
     }
 
-    public async Task<Result<IEnumerable<QuizDto>>> GetPage(int page, int pageSize)
+    public async Task<Result<IEnumerable<Quiz>>> GetPage(int page, int pageSize)
     {
         if (page < 0 || pageSize <= 0)
         {
             var exception = new ArgumentException("Incorrect page or page size");
-            return new Result<IEnumerable<QuizDto>>(exception);
+            return new Result<IEnumerable<Quiz>>(exception);
         }
 
-        var quizPage = await quizRepository.GetPageDto(pageSize, page);
-        return new Result<IEnumerable<QuizDto>>(quizPage);
+        var quizPage = await quizRepository.GetPage(pageSize, page);
+        return new Result<IEnumerable<Quiz>>(quizPage);
     }
 
-    public async Task<IEnumerable<QuizDto>> MatchAnyTag(IEnumerable<Tag> tags) =>
+    public async Task<IEnumerable<Quiz>> MatchAnyTag(IEnumerable<Tag> tags) =>
         await quizRepository.GetQuizzesWithOneTag(tags);
 
-    public async Task<IEnumerable<QuizDto>> MatchAllTags(IEnumerable<Tag> tags) =>
+    public async Task<IEnumerable<Quiz>> MatchAllTags(IEnumerable<Tag> tags) =>
         await quizRepository.GetQuizzesWithAllTags(tags);
 
     public async Task<Result<IEnumerable<Quiz>>> GetVirtualize(int startIndex, int count)

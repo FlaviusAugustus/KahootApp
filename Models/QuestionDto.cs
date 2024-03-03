@@ -2,7 +2,8 @@
 
 public class QuestionDto
 {
-    public string Name { get; set; } = string.Empty;
-    public IEnumerable<string> AllAnswers { get; set; } = Enumerable.Empty<string>();
-    public Answers Answer { get; set; } = 0;
+    public string Value { get; set; } = string.Empty;
+    public int Time { get; set; } = int.MaxValue;
+    public string? ImageUrl { get; set; } = string.Empty;
+    public ICollection<ChoiceDto> Choices { get; set; } = new List<ChoiceDto>();
 }

@@ -7,14 +7,14 @@ namespace BracketMaker.Services.QuizService;
 
 public interface IQuizService
 {
-    Task<Result<QuizDto>> GetById(Guid quizId);
+    Task<Result<Quiz>> GetById(Guid quizId);
     Task Add(QuizDto quiz);
     Task AddRange(IEnumerable<QuizDto> quizzes);
     Task<Result<Guid>> Remove(ClaimsPrincipal user, Guid quizId);
-    Task<Result<QuizDto>> Update(ClaimsPrincipal user, QuizDto quiz);
-    Task<Result<IEnumerable<QuizDto>>> GetPage(int page, int pageSize);
-    Task<IEnumerable<QuizDto>> MatchAnyTag(IEnumerable<Tag> tags);
-    Task<IEnumerable<QuizDto>> MatchAllTags(IEnumerable<Tag> tags);
+    Task<Result<Quiz>> Update(ClaimsPrincipal user, QuizDto quiz);
+    Task<Result<IEnumerable<Quiz>>> GetPage(int page, int pageSize);
+    Task<IEnumerable<Quiz>> MatchAnyTag(IEnumerable<Tag> tags);
+    Task<IEnumerable<Quiz>> MatchAllTags(IEnumerable<Tag> tags);
     Task<Result<IEnumerable<Quiz>>> GetVirtualize(int startIndex, int count);
 
     Task<int> GetCount();

@@ -14,7 +14,16 @@ public class QuestionConfiguration : IEntityTypeConfiguration<Question>
             .HasForeignKey(i => i.QuizId);
 
         builder
-            .Property(i => i.Name)
+            .HasMany(q => q.Choices)
+            .WithOne(c => c.Question)
+            .HasForeignKey(c => c.QuestionID);
+
+        builder
+            .Property(q => q.ImageUrl)
+            .IsRequired(false);
+
+        builder
+            .Property(i => i.Value)
             .HasMaxLength(32);
     }
 }

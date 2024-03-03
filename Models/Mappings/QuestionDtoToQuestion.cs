@@ -2,11 +2,15 @@
 
 public static class QuestionDtoToQuestion
 {
-    public static Question ToQuestion(this QuestionDto questionDto, Quiz quiz) => new Question
+    public static Question ToQuestion(this QuestionDto questionDto, Quiz quiz)
     {
-        AllAnswers = questionDto.AllAnswers,
-        Answer = questionDto.Answer,
-        Quiz = quiz,
-        QuizId = quiz.Id
-    };
+        var question = new Question
+        { 
+            Value = questionDto.Value,
+            Time = questionDto.Time,
+            ImageUrl = questionDto.ImageUrl,
+            Choices = questionDto.Choices.Select(c => c.ToChoice()).ToList()
+        };
+        return question;
+    }
 }
