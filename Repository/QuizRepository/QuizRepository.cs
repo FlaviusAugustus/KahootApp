@@ -17,6 +17,14 @@ public class QuizRepository : GenericRepository<Quiz>, IQuizRepository
         await _context.Quizzes
             .ToListAsync();
 
+    public async Task<Quiz?> GetByIdIncludeAsync(Guid id) =>
+        await _context.Quizzes
+            .Include(q => q.Tags)
+            .Include(q => q.Questions)
+            .ThenInclude(q => q.Choices)
+            .SingleOrDefaultAsync(q => q.Id == id);
+            
+
     private static List<Tag> GetPresentTags(Quiz quiz, IEnumerable<Tag> queryTags) =>
         queryTags
             .Where(t => quiz.Tags.Contains(t))

@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using BracketMaker;
 using BracketMaker.AppConfigurationExtensions;
 using BracketMaker.AuthHandlers.Requirements;
@@ -19,7 +20,10 @@ builder.Services.ConfigureSwagger();
 
 builder.Services.ConfigureDatabase(builder.Configuration);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(opts =>
+{
+    opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 
 builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 

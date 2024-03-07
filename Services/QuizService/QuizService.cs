@@ -18,6 +18,14 @@ public class QuizService(IQuizRepository quizRepository,
             new Result<Quiz>(new ArgumentException("No such quiz exists")) :
             new Result<Quiz>(quiz);
     }
+    
+    public async Task<Result<Quiz>> GetByIdInclude(Guid id)
+    {
+        var quiz = await quizRepository.GetByIdIncludeAsync(id);
+        return quiz is null ? 
+            new Result<Quiz>(new ArgumentException("No such quiz exists")) :
+            new Result<Quiz>(quiz);
+    }
 
     public async Task Add(QuizDto quiz)
     {

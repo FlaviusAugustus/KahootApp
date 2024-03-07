@@ -14,7 +14,7 @@ public class QuizController(IQuizService quizService) : ControllerBase
     [Route("get/{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
-        var result = await quizService.GetById(id);
+        var result = await quizService.GetByIdInclude(id);
         return result.Match<IActionResult>(
             success => Ok(success),
             fail => NotFound(fail.Message));

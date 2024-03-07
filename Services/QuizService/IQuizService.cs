@@ -8,6 +8,7 @@ namespace BracketMaker.Services.QuizService;
 public interface IQuizService
 {
     Task<Result<Quiz>> GetById(Guid quizId);
+    Task<Result<Quiz>> GetByIdInclude(Guid quizId);
     Task Add(QuizDto quiz);
     Task AddRange(IEnumerable<QuizDto> quizzes);
     Task<Result<Guid>> Remove(ClaimsPrincipal user, Guid quizId);
