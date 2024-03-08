@@ -1,9 +1,9 @@
-using BracketMaker.Models;
-using BracketMaker.Models.Mappings;
+using KahootBackend.Models.Mappings;
+using KahootBackend.Models;
 using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 
-namespace BracketMaker.Repository.QuizRepository;
+namespace KahootBackend.Repository.QuizRepository;
 
 public class QuizRepository : GenericRepository<Quiz>, IQuizRepository
 {

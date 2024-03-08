@@ -1,13 +1,13 @@
-﻿using BracketMaker.AppConfigurationExtensions;
-using BracketMaker.Constants;
-using BracketMaker.Context.Configuration;
-using BracketMaker.ItemContext.Configuration;
-using BracketMaker.Models;
+﻿using KahootBackend.AppConfigurationExtensions;
+using KahootBackend.Constants;
+using KahootBackend.ItemContext.Configuration;
+using KahootBackend.Context.Configuration;
+using KahootBackend.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace BracketMaker.Context;
+namespace KahootBackend.Context;
 
 public class ItemContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {

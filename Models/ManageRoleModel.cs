@@ -1,4 +1,4 @@
-namespace BracketMaker.Models;
+namespace KahootBackend.Models;
 
 public class ManageRoleModel
 {

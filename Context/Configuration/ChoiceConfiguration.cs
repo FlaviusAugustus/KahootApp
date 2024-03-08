@@ -1,8 +1,8 @@
-﻿using BracketMaker.Models;
+﻿using KahootBackend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BracketMaker.Context.Configuration;
+namespace KahootBackend.Context.Configuration;
 
 public class ChoiceConfiguration : IEntityTypeConfiguration<Choice>
 {

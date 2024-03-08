@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace BracketMaker.Models;
+namespace KahootBackend.Models;
 
 public class Item : Entity
 {

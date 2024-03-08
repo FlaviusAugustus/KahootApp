@@ -1,7 +1,7 @@
-using BracketMaker.Models;
+using KahootBackend.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace BracketMaker.AppConfigurationExtensions;
+namespace KahootBackend.AppConfigurationExtensions;
 
 public static class ConfigureIdentityExtensions
 {

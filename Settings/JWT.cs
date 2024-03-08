@@ -1,4 +1,4 @@
-namespace BracketMaker.Settings;
+namespace KahootBackend.Settings;
 
 public class JWT
 {

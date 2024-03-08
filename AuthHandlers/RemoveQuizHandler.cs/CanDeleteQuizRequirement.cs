@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace BracketMaker.AuthHandlers.Requirements;
+namespace KahootBackend.AuthHandlers.Requirements;
 
 public class CanDeleteQuizRequirement : IAuthorizationRequirement {}

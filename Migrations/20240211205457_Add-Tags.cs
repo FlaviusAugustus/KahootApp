@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BracketMaker.Migrations
+namespace KahootBackend.Migrations
 {
     /// <inheritdoc />
     public partial class AddTags : Migration

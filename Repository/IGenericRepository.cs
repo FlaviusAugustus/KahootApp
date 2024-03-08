@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
-using BracketMaker.Models;
+using KahootBackend.Models;
 
-namespace BracketMaker.Repository;
+namespace KahootBackend.Repository;
 public interface IGenericRepository<TEntity> 
     where TEntity : class, IEntity
 {

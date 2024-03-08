@@ -1,9 +1,9 @@
 using System.Text;
-using BracketMaker.Settings;
+using KahootBackend.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-namespace BracketMaker.AppConfigurationExtensions;
+namespace KahootBackend.AppConfigurationExtensions;
 
 public static class ConfigureJWTAuthentication
 {

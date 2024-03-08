@@ -1,19 +1,20 @@
-﻿using BracketMaker.ClientMethods;
-using BracketMaker.Models;
-using BracketMaker.Services;
+﻿using KahootBackend.ClientMethods;
+using KahootBackend.Models;
+using KahootBackend.Services;
 using Microsoft.AspNetCore.SignalR;
-namespace BracketMaker;
+namespace KahootBackend.Hubs;
 
 public class GameHub(IGameService gameService) : Hub<IGameTypedHub>
 {
-     public async Task CreateGroup(string roomName)
+     public GroupInfo CreateGroup(string roomName)
      {
-          gameService.AddGame(Context.ConnectionId);
-          await Clients.Caller.OnGroupCreated(new GroupInfo
+          var groupID = Guid.NewGuid().ToString(); 
+          gameService.AddGame(Context.ConnectionId, groupID);
+          return new GroupInfo
           {
                HostConnectionID = Context.ConnectionId, 
-               GroupID = gameService.GenerateGroupID()
-          });
+               GroupID = groupID
+          };
      }
 
      public async Task JoinGroup(string groupId, string userName)

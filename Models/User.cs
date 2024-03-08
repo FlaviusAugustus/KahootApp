@@ -1,7 +1,7 @@
 using System.Collections;
 using Microsoft.AspNetCore.Identity;
 
-namespace BracketMaker.Models;
+namespace KahootBackend.Models;
 
 public class User : IdentityUser<Guid>, IEntity
 {

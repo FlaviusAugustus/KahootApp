@@ -1,6 +1,6 @@
-using BracketMaker.Models;
+using KahootBackend.Models;
 
-namespace BracketMaker.ClientMethods;
+namespace KahootBackend.ClientMethods;
 
 public interface IGameTypedHub
 {

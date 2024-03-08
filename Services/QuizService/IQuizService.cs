@@ -1,9 +1,9 @@
 ﻿using System.Security.Claims;
-using BracketMaker.Models;
+using KahootBackend.Models;
 using LanguageExt;
 using LanguageExt.Common;
 
-namespace BracketMaker.Services.QuizService;
+namespace KahootBackend.Services.QuizService;
 
 public interface IQuizService
 {

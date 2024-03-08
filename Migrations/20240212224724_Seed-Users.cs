@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace BracketMaker.Migrations
+namespace KahootBackend.Migrations
 {
     /// <inheritdoc />
     public partial class SeedUsers : Migration

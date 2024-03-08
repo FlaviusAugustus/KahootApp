@@ -1,4 +1,4 @@
-namespace BracketMaker.Constants;
+namespace KahootBackend.Constants;
 
 public enum Role
 {

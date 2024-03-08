@@ -1,7 +1,7 @@
-using BracketMaker.AuthHandlers.Requirements;
-using BracketMaker.Constants;
+using KahootBackend.AuthHandlers.Requirements;
+using KahootBackend.Constants;
 
-namespace BracketMaker.AppConfigurationExtensions;
+namespace KahootBackend.AppConfigurationExtensions;
 
 public static class ConfigureAuthorizationPoliciesExtensions
 {

@@ -1,10 +1,10 @@
-using BracketMaker.Constants;
-using BracketMaker.Models;
+using KahootBackend.Constants;
+using KahootBackend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuizApi.Services.UserService;
 
-namespace BracketMaker.Controllers;
+namespace KahootBackend.Controllers;
 
 [ApiController]
 [Route("api/auth")]

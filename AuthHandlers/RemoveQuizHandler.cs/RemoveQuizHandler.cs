@@ -1,8 +1,8 @@
-﻿using BracketMaker.Constants;
-using BracketMaker.Models;
+﻿using KahootBackend.Constants;
+using KahootBackend.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace BracketMaker.AuthHandlers.Requirements;
+namespace KahootBackend.AuthHandlers.Requirements;
 
 public class RemoveQuizHandler : AuthorizationHandler<CanDeleteQuizRequirement, Quiz>
 {

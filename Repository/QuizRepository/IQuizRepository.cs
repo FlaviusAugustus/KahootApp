@@ -1,6 +1,6 @@
-using BracketMaker.Models;
+using KahootBackend.Models;
 
-namespace BracketMaker.Repository.QuizRepository;
+namespace KahootBackend.Repository.QuizRepository;
 
 public interface IQuizRepository : IGenericRepository<Quiz>
 {

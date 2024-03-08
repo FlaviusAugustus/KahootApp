@@ -1,7 +1,7 @@
-﻿using BracketMaker.Controllers;
-using BracketMaker.Context;
+﻿using KahootBackend.Controllers;
+using KahootBackend.Context;
 
-namespace BracketMaker.Services.BracketCreatorService
+namespace KahootBackend.Services.BracketCreatorService
 {
     public class BracketCreatorService
     {

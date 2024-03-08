@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualBasic;
 
-namespace BracketMaker.Models;
+namespace KahootBackend.Models;
 
 public class Question : Entity
 {

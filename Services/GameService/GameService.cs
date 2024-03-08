@@ -1,20 +1,20 @@
-﻿using BracketMaker.Models;
+﻿using KahootBackend.Models;
 using LanguageExt;
 using LanguageExt.Common;
 
-namespace BracketMaker.Services;
+namespace KahootBackend.Services;
 
 public class GameService : IGameService
 {
     public Dictionary<string, GameInfo> GameHosts { get; init; } = new();
     private object _locker = new();
 
-    public void AddGame(string connectionId)
+    public void AddGame(string connectionId, string groupID)
     {
         lock (_locker)
         {
-            GameHosts.Remove(connectionId);
-            GameHosts.Add(connectionId, new GameInfo {HostConnectionID = connectionId});
+            GameHosts.Remove(groupID);
+            GameHosts.Add(groupID, new GameInfo {HostConnectionID = connectionId});
         }
     }
 

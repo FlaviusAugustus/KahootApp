@@ -1,10 +1,10 @@
 using System.Text.Json.Serialization;
-using BracketMaker;
-using BracketMaker.AppConfigurationExtensions;
-using BracketMaker.AuthHandlers.Requirements;
-using BracketMaker.Services.DateTimeProvider;
-using BracketMaker.Services.QuizService;
-using BracketMaker.Services.UserService;
+using KahootBackend.AppConfigurationExtensions;
+using KahootBackend.AuthHandlers.Requirements;
+using KahootBackend.Hubs;
+using KahootBackend.Services.DateTimeProvider;
+using KahootBackend.Services.QuizService;
+using KahootBackend.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
 using QuizApi.Services.UserService;
 

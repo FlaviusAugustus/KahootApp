@@ -1,9 +1,9 @@
-using BracketMaker.Constants;
+using KahootBackend.Constants;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace BracketMaker.Context.Configuration;
+namespace KahootBackend.Context.Configuration;
 
 public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole<Guid>>
 {

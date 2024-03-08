@@ -1,4 +1,4 @@
-﻿namespace BracketMaker.Models.Mappings;
+﻿namespace KahootBackend.Models.Mappings;
 
 public static class QuizDtoToQuiz
 {

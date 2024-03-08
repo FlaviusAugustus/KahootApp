@@ -1,9 +1,8 @@
 ﻿using System.Linq.Expressions;
-using BracketMaker.Models;
 using Microsoft.EntityFrameworkCore;
-using BracketMaker;
+using KahootBackend.Models;
 
-namespace BracketMaker.Repository;
+namespace KahootBackend.Repository;
 
 public class GenericRepository<TEntity>(Context.ItemContext context) : IGenericRepository<TEntity>
     where TEntity : class, IEntity

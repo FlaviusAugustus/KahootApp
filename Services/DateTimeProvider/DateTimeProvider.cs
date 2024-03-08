@@ -1,4 +1,4 @@
-namespace BracketMaker.Services.DateTimeProvider;
+namespace KahootBackend.Services.DateTimeProvider;
 
 public class DateTimeProvider : IDateTimeProvider
 {

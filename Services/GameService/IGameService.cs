@@ -1,13 +1,13 @@
-﻿using BracketMaker.Models;
+﻿using KahootBackend.Models;
 using LanguageExt;
 using LanguageExt.Common;
 
-namespace BracketMaker.Services;
+namespace KahootBackend.Services;
 
 public interface IGameService
 {
     public Dictionary<string, GameInfo> GameHosts { get; init; }
-    public void AddGame(string connectionId);
+    public void AddGame(string connectionId, string groupID);
 
     public GameInfo GetGameState(string connectionId);
     

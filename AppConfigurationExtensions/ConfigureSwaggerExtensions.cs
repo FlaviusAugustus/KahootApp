@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 
-namespace BracketMaker.AppConfigurationExtensions;
+namespace KahootBackend.AppConfigurationExtensions;
 
 public static class ConfigureSwaggerExtensions
 {

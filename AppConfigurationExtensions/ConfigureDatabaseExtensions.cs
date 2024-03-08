@@ -1,9 +1,9 @@
-using BracketMaker.Repository;
-using BracketMaker.Repository.QuizRepository;
-using BracketMaker.Services;
+using KahootBackend.Repository;
+using KahootBackend.Repository.QuizRepository;
+using KahootBackend.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace BracketMaker.AppConfigurationExtensions;
+namespace KahootBackend.AppConfigurationExtensions;
 
 public static class ConfigureDatabaseExtensions
 {

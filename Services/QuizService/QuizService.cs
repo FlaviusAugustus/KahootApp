@@ -1,12 +1,12 @@
 ﻿using System.Security.Claims;
-using BracketMaker.Constants;
-using BracketMaker.Models;
-using BracketMaker.Models.Mappings;
-using BracketMaker.Repository.QuizRepository;
+using KahootBackend.Models.Mappings;
+using KahootBackend.Constants;
+using KahootBackend.Models;
+using KahootBackend.Repository.QuizRepository;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Authorization;
 
-namespace BracketMaker.Services.QuizService;
+namespace KahootBackend.Services.QuizService;
 
 public class QuizService(IQuizRepository quizRepository,
     IAuthorizationService authService) : IQuizService

@@ -1,18 +1,18 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using BracketMaker.Models;
 using LanguageExt;
 using LanguageExt.Common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using BracketMaker.Constants;
-using BracketMaker.Services.DateTimeProvider;
-using BracketMaker.Settings;
+using KahootBackend.Constants;
+using KahootBackend.Models;
+using KahootBackend.Services.DateTimeProvider;
+using KahootBackend.Settings;
 using QuizApi.Services.UserService;
 
-namespace BracketMaker.Services.UserService;
+namespace KahootBackend.Services.UserService;
 
 public class UserService(UserManager<User> userManager,
         RoleManager<IdentityRole<Guid>> roleManager, IOptions<JWT> jwt,
