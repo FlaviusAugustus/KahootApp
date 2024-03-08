@@ -91,7 +91,7 @@ public class QuizController(IQuizService quizService) : ControllerBase
     public async Task<IActionResult> MatchAnyTag(IEnumerable<Tag> tags)
     {
         var matches = await quizService.MatchAnyTag(tags);
-        return Equals(matches, Enumerable.Empty<QuizDto>()) ? 
+        return Equals(matches, Enumerable.Empty<Quiz>()) ? 
                 Ok(matches) :
                 NotFound();
     }
@@ -101,7 +101,7 @@ public class QuizController(IQuizService quizService) : ControllerBase
     public async Task<IActionResult> MatchAllTags(IEnumerable<Tag> tags)
     {
         var matches = await quizService.MatchAllTags(tags);
-        return Equals(matches, Enumerable.Empty<QuizDto>()) ? 
+        return Equals(matches, Enumerable.Empty<Quiz>()) ? 
                 Ok(matches) :
                 NotFound();
     }
