@@ -1,20 +1,18 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 443
+﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+WORKDIR /App
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-COPY ["BracketMaker.csproj", "BracketMaker/"]
-RUN dotnet restore "BracketMaker.csproj"
-COPY . .
-WORKDIR "BracketMaker"
-RUN dotnet build "BracketMaker.csproj" -c Release -o /app/build
+COPY KahootBackend.csproj ./
 
-FROM build AS publish
-RUN dotnet publish "BracketMaker.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet restore
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "BracketMaker.dll"]
+COPY . ./
+
+RUN dotnet publish -c Release -o out
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /App
+COPY --from=build-env /App/out .
+ENTRYPOINT ["dotnet", "KahootBackend.dll", "--server.urls", "http://0.0.0.0:7161"]
+
+EXPOSE 7161
+ENV ASPNETCORE_URLS=http://0.0.0.0:7161
