@@ -1,0 +1,35 @@
+﻿@using KahootBackend.Models
+@page "/login"
+@rendermode InteractiveServer
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+<div class="container-fluid d-flex justify-content-center align-items-center mt-5">
+    <div class="card rounded-2 p-5 col-12 col-md-6 col-xl-3">
+        <h3>Login</h3>
+        <EditForm Model="@_requestModel" OnValidSubmit="@LogIn" FormName="form">
+            <div class="d-flex flex-column justify-content-start gap-3">
+                <InputText @bind-Value="@_requestModel.Email" placeholder="Email"/>
+                <InputText type="password" @bind-Value="@_requestModel.Password" placeholder="Password"/>
+                <button class="btn btn-primary w-50" type="submit">Submit</button>
+                <p class="fs-6"> Don't have an account?
+                <a href="" @onclick:preventDefault @onclick="@(() => NavigationManager.NavigateTo("/register"))">
+                    Register here
+                </a></p> 
+            </div>
+        </EditForm>
+    </div>
+</div>
+@code {
+    TokenRequestModel _requestModel = new();
+
+    private async Task LogIn()
+    {
+        var res = await HttpClient.PostAsJsonAsync("https://localhost:7161/api/auth/login", _requestModel);
+        var loginResponse = await res.Content.ReadFromJsonAsync<AuthModel>();
+        if (loginResponse?.IsAuthenticated == true)
+        {
+            NavigationManager.NavigateTo("");
+        }
+    }
+
+}

@@ -1,0 +1,44 @@
+﻿@page "/lobby/{Id:guid}"
+@using Microsoft.AspNetCore.SignalR.Client
+@using KahootBackend.Models
+@rendermode InteractiveServer
+
+<h3>Lobby</h3>
+
+<h2>@_groupInfo?.GroupID</h2>
+<h2>@_groupInfo?.HostConnectionID</h2>
+
+<ul>
+    @foreach (var username in _userNames)
+    {
+        <li>@username</li> 
+    }
+</ul>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+    
+    private HubConnection? _connection;
+    private GroupInfo? _groupInfo;
+    private readonly IList<string> _userNames = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _connection = new HubConnectionBuilder()
+            .WithUrl("https://localhost:7161/game")
+            .Build();
+
+        _connection.On<string>("PlayerJoined", AddPlayer);
+
+        await _connection.StartAsync();
+
+        _groupInfo = await _connection.InvokeAsync<GroupInfo>("CreateGroup", "room");
+    }
+
+    private void AddPlayer(string player)
+    {
+        _userNames.Add(player);
+        InvokeAsync(StateHasChanged);
+    }
+}

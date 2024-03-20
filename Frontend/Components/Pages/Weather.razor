@@ -1,0 +1,45 @@
+﻿@page "/weather"
+@using KahootBackend.Models
+@attribute [StreamRendering]
+@rendermode InteractiveServer
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<PageTitle>Weather</PageTitle>
+
+<div class="container d-flex flex-column justify-content-center mt-5 w-75">
+    <h1>Browse</h1>
+    <div class="d-grid">
+        <Virtualize ItemsProvider="LoadQuizzes" OverscanCount="2" ItemSize="400">
+            <ChildContent>
+                <div class="row justify-content-start g-0">
+                    @foreach (var quiz in context)
+                    {
+                        <div @key="@quiz.Id" class="col-12 col-md-6 col-lg-3 g-3">
+                            <div class="card justify-content-center align-items-start card-hover border-0" role="button" @onclick="@(() => NavigateToQuiz(quiz))">
+                                <div class="card-img-top w-100" style="height: 300px;  background: url(@quiz.ImageUrl) center; background-size: cover;"/>
+                                <div class="d-flex flex-row justify-content-between align-items-center w-100">
+                                    <div class="card-title m-4 fs-5 lead text-nowrap text-truncate">@quiz.Title</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </ChildContent>
+        </Virtualize>
+    </div>
+</div>
+@code {
+    private IList<Quiz>? _quizzes = new List<Quiz>();
+
+    private async ValueTask<ItemsProviderResult<Quiz[]>> LoadQuizzes(ItemsProviderRequest request)
+    {
+        var items = await HttpClient.GetFromJsonAsync<IList<Quiz>>($"https://localhost:7161/api/quiz/get-virtualize?startIndex={request.StartIndex*4}&count={request.Count * 4}");
+        var itemsChunked = items?.Chunk(4);
+        var count = await HttpClient.GetFromJsonAsync<int>($"https://localhost:7161/api/quiz/count");
+        return new ItemsProviderResult<Quiz[]>(itemsChunked, count);
+    }
+
+    private void NavigateToQuiz(IEntity quiz) =>
+        NavigationManager.NavigateTo($"quiz/{quiz.Id}");
+}

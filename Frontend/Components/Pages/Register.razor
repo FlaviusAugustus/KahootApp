@@ -1,0 +1,37 @@
+﻿@using KahootBackend.Models
+@page "/register"
+@rendermode InteractiveServer
+@inject HttpClient HttpClient
+<div class="container-fluid d-flex justify-content-center align-items-center mt-5">
+    <div class="card rounded-2 p-5 col-12 col-md-6 col-xl-3">
+        <h3>Register</h3>
+        <EditForm Model="@_requestModel" OnValidSubmit="@LogIn" FormName="form">
+            <div class="d-flex flex-column justify-content-start gap-3">
+                <InputText @bind-Value="@_requestModel.UserName" placeholder="Username"/>
+                <InputText @bind-Value="@_requestModel.Email" placeholder="Email"/>
+                <InputText type="password" @bind-Value="@_requestModel.Password" placeholder="Password"/>
+                <InputText type="password" @bind-Value="@_requestModel.PasswordRepeat" placeholder="Repeat Password"/>
+                <button class="btn btn-primary w-50" type="submit">Submit</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private RegisterModel _requestModel = new();
+
+    private async Task LogIn()
+    {
+        if (_requestModel.PasswordRepeat != _requestModel.Password)
+        {
+            return;
+        }
+        
+        var res = await HttpClient.PostAsJsonAsync("https://localhost:7161/api/auth/register", _requestModel);
+        var loginResponse = await res.Content.ReadFromJsonAsync<AuthModel>();
+        if (loginResponse?.IsAuthenticated == true)
+        {
+        }
+    }
+
+}

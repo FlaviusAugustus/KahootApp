@@ -1,0 +1,58 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.SignalR.Client
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+
+<PageTitle>Home</PageTitle>
+
+
+<EditForm Model="@_request" OnValidSubmit="@JoinGroup" FormName="form">
+    <InputText @bind-Value="@_request.GroupID" placeholder="Game ID"></InputText> 
+    <InputText @bind-Value="@_request.UserName" placeholder="Username"></InputText> 
+    <button class="btn btn-primary w-50" type="submit">Submit</button>
+</EditForm>
+
+@if (_error != string.Empty)
+{
+    @_error
+}
+
+
+@code 
+{
+    private readonly JoinRequest _request = new();
+    private string _error = string.Empty;
+    private HubConnection _connection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _connection = new HubConnectionBuilder()
+            .WithUrl("https://localhost:7161/game")
+            .Build();
+
+        _connection.On<string>("FailedToJoinGame", (message) =>
+        {
+            _error = message;
+        });
+
+        _connection.On("GameJoined", () =>
+        {
+            NavigationManager.NavigateTo("/play");
+        });
+
+        await _connection.StartAsync();
+    }
+
+    private async Task JoinGroup()
+    {
+        await _connection.InvokeAsync("JoinGroup", _request.GroupID, _request.UserName);
+    }
+
+    class JoinRequest
+    {
+        public string GroupID { get; set; }
+        public string UserName { get; set; }
+    }
+
+}
+
