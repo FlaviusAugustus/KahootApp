@@ -12,8 +12,11 @@ namespace KahootBackend.Context;
 public class ItemContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
     public DbSet<Quiz> Quizzes { get; set; }
-    
-    public ItemContext(DbContextOptions<Context.ItemContext> options) : base(options) {}
+
+    public ItemContext(DbContextOptions<Context.ItemContext> options) : base(options)
+    {
+        Database.EnsureCreated();
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
