@@ -12,7 +12,8 @@ RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /App
 COPY --from=build-env /App/out .
-ENTRYPOINT ["dotnet", "KahootBackend.dll", "--server.urls", "http://0.0.0.0:7161"]
+ENTRYPOINT ["dotnet", "KahootBackend.dll", "--server.urls", "http://0.0.0.0:7161", "--launch-profile docker"]
 
 EXPOSE 7161
 ENV ASPNETCORE_URLS=http://0.0.0.0:7161
+ENV ASPNETCORE_ENVIRONMENT=Development 
