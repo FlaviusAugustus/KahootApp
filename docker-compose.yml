@@ -1,0 +1,22 @@
+﻿version: '3.9'
+services:
+  backend:
+    build:
+      dockerfile: ./Api/Dockerfile
+      context: .
+    ports:
+      - "7161:7161"
+    environment:
+      ASPNETCORE_URLS: "http://0.0.0.0:7161"
+      ASPNETCORE_ENVIRONMENT: "Development"
+  frontend:
+    build: 
+      dockerfile: ./Frontend/Dockerfile
+      context: .
+    ports:
+      - "5161:5161"
+    depends_on: 
+      - backend
+    environment:
+      ASPNETCORE_URLS: "http://0.0.0.0:5161"
+      ASPNETCORE_ENVIRONMENT: "Docker"
