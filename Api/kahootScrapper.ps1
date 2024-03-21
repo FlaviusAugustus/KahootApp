@@ -1,4 +1,4 @@
-$quizIDs = @(curl  -Uri "https://create.kahoot.it/rest/kahoots/?query=&limit=100&orderBy=number_of_players&cursor=0&searchCluster=1&includeExtendedCounters=false&inventoryItemId=ANY"  | Select-Object -Expand Content | jq '.entities[] | .card.uuid')
+$quizIDs = @(curl  -Uri "https://create.kahoot.it/rest/kahoots/?query=kahoot&limit=100&orderBy=number_of_players&cursor=0&searchCluster=1&includeExtendedCounters=false&inventoryItemId=ANY"  | Select-Object -Expand Content | jq '.entities[] | .card.uuid')
 #'[' | Out-File -FilePath ./kahootResult.json -Append
 foreach($ID in $quizIds) {
     $IDTrim = $ID.Trim('"')

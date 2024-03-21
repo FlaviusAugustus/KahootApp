@@ -3,9 +3,11 @@ using KahootBackend.Constants;
 using KahootBackend.ItemContext.Configuration;
 using KahootBackend.Context.Configuration;
 using KahootBackend.Models;
+using KahootBackend.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace KahootBackend.Context;
 
@@ -13,14 +15,16 @@ public class ItemContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 {
     public DbSet<Quiz> Quizzes { get; set; }
 
-    public ItemContext(DbContextOptions<Context.ItemContext> options) : base(options)
+    private IConfiguration  _config;
+
+    public ItemContext(DbContextOptions<Context.ItemContext> options, IConfiguration config) : base(options)
     {
-        Database.EnsureCreated();
+        _config = config;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=data.db");
+        optionsBuilder.UseSqlite(_config.GetConnectionString("Database"));
         base.OnConfiguring(optionsBuilder);
     }
 

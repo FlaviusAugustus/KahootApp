@@ -3,6 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+Api/kahootResult.json
+Api/data.db
+!Api/dataSeed.db
 # dotenv files
 .env
 

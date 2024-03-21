@@ -8,10 +8,14 @@ services:
       - "7161:7161"
     environment:
       ASPNETCORE_URLS: "http://0.0.0.0:7161"
-      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_ENVIRONMENT: "Docker"
+    volumes:
+      - type: bind
+        source: ./Api/dataSeed.db
+        target: /App/dataSeed.db
   frontend:
     build: 
-      dockerfile: ./Frontend/Dockerfile
+      dockerfile: ./Client/Dockerfile
       context: .
     ports:
       - "5161:5161"
