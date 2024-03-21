@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KahootBackend", "Api\KahootBackend.csproj", "{F128D943-FD7F-4984-B79B-D8D3728AB423}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KahootFrontend", "Frontend\KahootFrontend.csproj", "{1B5EFC68-072D-47F2-9BC4-5D7AC5281484}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F128D943-FD7F-4984-B79B-D8D3728AB423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F128D943-FD7F-4984-B79B-D8D3728AB423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F128D943-FD7F-4984-B79B-D8D3728AB423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F128D943-FD7F-4984-B79B-D8D3728AB423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B5EFC68-072D-47F2-9BC4-5D7AC5281484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B5EFC68-072D-47F2-9BC4-5D7AC5281484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B5EFC68-072D-47F2-9BC4-5D7AC5281484}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B5EFC68-072D-47F2-9BC4-5D7AC5281484}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
