@@ -26,21 +26,21 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _connection = new HubConnectionBuilder()
-            .WithUrl("https://localhost:7161/game")
-            .Build();
+        //_connection = new HubConnectionBuilder()
+        //    .WithUrl("http://host.docker.internal:7161/game")
+        //    .Build();
 
-        _connection.On<string>("FailedToJoinGame", (message) =>
-        {
-            _error = message;
-        });
+        //_connection.On<string>("FailedToJoinGame", (message) =>
+        //{
+        //    _error = message;
+        //});
 
-        _connection.On("GameJoined", () =>
-        {
-            NavigationManager.NavigateTo("/play");
-        });
+        //_connection.On("GameJoined", () =>
+        //{
+        //    NavigationManager.NavigateTo("/play");
+        //});
 
-        await _connection.StartAsync();
+        //await _connection.StartAsync();
     }
 
     private async Task JoinGroup()

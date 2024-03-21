@@ -1,6 +1,6 @@
 ﻿@page "/lobby/{Id:guid}"
 @using Microsoft.AspNetCore.SignalR.Client
-@using KahootBackend.Models
+@using KahootFrontend.Models
 @rendermode InteractiveServer
 
 <h3>Lobby</h3>
@@ -25,15 +25,15 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _connection = new HubConnectionBuilder()
-            .WithUrl("https://localhost:7161/game")
-            .Build();
+        //_connection = new HubConnectionBuilder()
+        //    .WithUrl("https://localhost:7161/game")
+        //    .Build();
 
-        _connection.On<string>("PlayerJoined", AddPlayer);
+        //_connection.On<string>("PlayerJoined", AddPlayer);
 
-        await _connection.StartAsync();
+        //await _connection.StartAsync();
 
-        _groupInfo = await _connection.InvokeAsync<GroupInfo>("CreateGroup", "room");
+        //_groupInfo = await _connection.InvokeAsync<GroupInfo>("CreateGroup", "room");
     }
 
     private void AddPlayer(string player)

@@ -1,8 +1,9 @@
 ﻿@page "/weather"
-@using KahootBackend.Models
+@using KahootFrontend.Models
+@using KahootFrontend.Services
 @attribute [StreamRendering]
 @rendermode InteractiveServer
-@inject HttpClient HttpClient
+@inject ApiService ApiService
 @inject NavigationManager NavigationManager
 
 <PageTitle>Weather</PageTitle>
@@ -34,9 +35,9 @@
 
     private async ValueTask<ItemsProviderResult<Quiz[]>> LoadQuizzes(ItemsProviderRequest request)
     {
-        var items = await HttpClient.GetFromJsonAsync<IList<Quiz>>($"https://localhost:7161/api/quiz/get-virtualize?startIndex={request.StartIndex*4}&count={request.Count * 4}");
+        var items = await ApiService.Client.GetFromJsonAsync<IList<Quiz>>($"/api/quiz/get-virtualize?startIndex={request.StartIndex*4}&count={request.Count * 4}");
         var itemsChunked = items?.Chunk(4);
-        var count = await HttpClient.GetFromJsonAsync<int>($"https://localhost:7161/api/quiz/count");
+        var count = await ApiService.Client.GetFromJsonAsync<int>($"/api/quiz/count");
         return new ItemsProviderResult<Quiz[]>(itemsChunked, count);
     }
 

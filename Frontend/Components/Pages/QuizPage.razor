@@ -1,8 +1,9 @@
 ﻿@page "/quiz/{Id:guid}"
-@using KahootBackend.Models
+@using KahootFrontend.Models
+@using KahootFrontend.Services
 @attribute [StreamRendering]
 @rendermode InteractiveServer
-@inject HttpClient HttpClient
+@inject ApiService ApiService
 @inject NavigationManager NavigationManager
 
 <div class="d-flex flex-row h-100 w-100 justify-content-center overflow-hidden">
@@ -97,5 +98,5 @@
     }
 
     private async Task LoadQuiz() => 
-        _quiz = await HttpClient.GetFromJsonAsync<Quiz>($"https://localhost:7161/api/quiz/get/{Id}");
+        _quiz = await ApiService.Client.GetFromJsonAsync<Quiz>($"/api/quiz/get/{Id}");
 }

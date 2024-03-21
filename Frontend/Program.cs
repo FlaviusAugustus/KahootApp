@@ -1,4 +1,6 @@
+using DefaultNamespace;
 using KahootFrontend.Components;
+using KahootFrontend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,9 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddHttpClient();
 
+builder.Services.AddHttpClient<ApiService>();
+
+builder.Services.Configure<HttpClientOptions>(builder.Configuration.GetSection(HttpClientOptions.Section));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

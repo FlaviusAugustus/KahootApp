@@ -1,7 +1,8 @@
-﻿@using KahootBackend.Models
-@page "/login"
+﻿@page "/login"
+@using KahootFrontend.Models
+@using KahootFrontend.Services
 @rendermode InteractiveServer
-@inject HttpClient HttpClient
+@inject ApiService ApiService
 @inject NavigationManager NavigationManager
 <div class="container-fluid d-flex justify-content-center align-items-center mt-5">
     <div class="card rounded-2 p-5 col-12 col-md-6 col-xl-3">
@@ -24,7 +25,7 @@
 
     private async Task LogIn()
     {
-        var res = await HttpClient.PostAsJsonAsync("https://localhost:7161/api/auth/login", _requestModel);
+        var res = await ApiService.Client.PostAsJsonAsync("/api/auth/login", _requestModel);
         var loginResponse = await res.Content.ReadFromJsonAsync<AuthModel>();
         if (loginResponse?.IsAuthenticated == true)
         {

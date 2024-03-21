@@ -1,7 +1,8 @@
-﻿@using KahootBackend.Models
-@page "/register"
+﻿@page "/register"
+@using KahootFrontend.Models
+@using KahootFrontend.Services
 @rendermode InteractiveServer
-@inject HttpClient HttpClient
+@inject ApiService ApiService
 <div class="container-fluid d-flex justify-content-center align-items-center mt-5">
     <div class="card rounded-2 p-5 col-12 col-md-6 col-xl-3">
         <h3>Register</h3>
@@ -27,7 +28,7 @@
             return;
         }
         
-        var res = await HttpClient.PostAsJsonAsync("https://localhost:7161/api/auth/register", _requestModel);
+        var res = await ApiService.Client.PostAsJsonAsync("/api/auth/register", _requestModel);
         var loginResponse = await res.Content.ReadFromJsonAsync<AuthModel>();
         if (loginResponse?.IsAuthenticated == true)
         {
