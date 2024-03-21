@@ -1,21 +1,13 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
-USER $APP_UID
+﻿FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+
 WORKDIR /app
+COPY Frontend ./
+RUN dotnet restore KahootFrontend.csproj
+RUN dotnet publish -c Release -o out 
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["KahootFrontend/KahootFrontend.csproj", "KahootFrontend/"]
-RUN dotnet restore "KahootFrontend/KahootFrontend.csproj"
-COPY . .
-WORKDIR "/src/KahootFrontend"
-RUN dotnet build "KahootFrontend.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "KahootFrontend.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "KahootFrontend.dll"]
+COPY --from=build-env /app/out .
+ENTRYPOINT ["dotnet", "KahootFrontend.dll", "--server.urls", "http://0.0.0.0:5161"]
+
+EXPOSE 5161

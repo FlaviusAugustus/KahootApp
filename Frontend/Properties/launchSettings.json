@@ -30,6 +30,14 @@
           "ASPNETCORE_ENVIRONMENT": "Development"
         }
       },
+      "docker": {
+        "commandName": "Project",
+        "dotnetRunMessages": true,
+        "hotReloadEnabled": true,
+        "hotReloadProfile": "blazorwasm",
+        "commandLineArgs": "watch run",
+        "launchBrowser": true
+      },
       "IIS Express": {
         "commandName": "IISExpress",
         "launchBrowser": true,
