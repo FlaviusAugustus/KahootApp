@@ -19,6 +19,7 @@ SwaggerUI - http://localhost:7161/swagger
 - JWT authorization
 - resource and policy based authentication
 - UI written in Blazor
+- Project deployment with a seeded database via Docker
 
 ## TODO
 - use Signalr to implement real-time game functionality
