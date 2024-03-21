@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KahootBackend", "Api\KahootBackend.csproj", "{F128D943-FD7F-4984-B79B-D8D3728AB423}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KahootFrontend", "Frontend\KahootFrontend.csproj", "{1B5EFC68-072D-47F2-9BC4-5D7AC5281484}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KahootFrontend", "Client\KahootFrontend.csproj", "{1B5EFC68-072D-47F2-9BC4-5D7AC5281484}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
