@@ -1,8 +1,8 @@
 ﻿@page "/quiz/{Id:guid}"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using KahootFrontend.Models
 @using KahootFrontend.Services
 @attribute [StreamRendering]
-@rendermode InteractiveServer
 @inject ApiService ApiService
 @inject NavigationManager NavigationManager
 
@@ -29,7 +29,7 @@
             </div>
             @foreach (var question in _quiz!.Questions)
             {
-                <div class="d-flex flex-column" role="button" @onclick="@(() => TriggerAnswers(question.Id))">
+                <div @key="@question.Id" class="d-flex flex-column" role="button" @onclick="@(() => TriggerAnswers(question.Id))">
                     <div class="d-flex flex-row card my-1 ps-3 align-items-center justify-content-between h-100 border-0" style="min-height: 100px">
                         @((MarkupString)question.Value)
                         <div class="col-1 h-100 rounded rounded-1" alt="question cover" style="background: url(@question?.ImageUrl) center; background-size: cover;"></div>
@@ -39,7 +39,7 @@
                     <div class="@(_visible[question.Id] ? "clicked" : "hidden")">
                         @foreach (var choice in question!.Choices)
                         { 
-                            <li class="list-group-item border-0">
+                            <li @key="@choice.Id" class="list-group-item border-0">
                                 <div class="d-flex flex-row justify-content-between mx-3 align-items-center">
                                     @((MarkupString)choice.Answer)
                                     @if (choice.Correct)
