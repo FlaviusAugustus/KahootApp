@@ -4,7 +4,11 @@ A quiz web app, which consists of a REST API written in ASP.NET CORE, and fronte
 
 clone the repo 
 ```console
-  git clone https://github.com/FlaviusAugustus/KahootBackend.git
+  git clone https://github.com/FlaviusAugustus/KahootApp.git
+```
+cd into the cloned directory
+```console
+  cd KahootApp
 ```
 build and run the containers
 ```console
