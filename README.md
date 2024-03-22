@@ -4,7 +4,11 @@ A quiz web app, which consists of a REST API written in ASP.NET CORE, and fronte
 
 clone the repo 
 ```console
-  git clone https://github.com/FlaviusAugustus/KahootBackend.git
+  git clone https://github.com/FlaviusAugustus/KahootApp.git
+```
+cd into the cloned directory
+```console
+  cd KahootApp
 ```
 build and run the containers
 ```console
@@ -19,6 +23,7 @@ SwaggerUI - http://localhost:7161/swagger
 - JWT authorization
 - resource and policy based authentication
 - UI written in Blazor
+- Project deployment with a seeded database via Docker
 
 ## TODO
 - use Signalr to implement real-time game functionality
