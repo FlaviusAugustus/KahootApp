@@ -1,10 +1,20 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.AspNetCore.Components.Authorization
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
 
 <PageTitle>Home</PageTitle>
 
+<AuthorizeView>
+    <Authorized>
+        Authorized
+    </Authorized>
+    <NotAuthorized>
+        Not Authorized
+    </NotAuthorized>
+</AuthorizeView>
 
 <EditForm Model="@_request" OnValidSubmit="@JoinGroup" FormName="form">
     <InputText @bind-Value="@_request.GroupID" placeholder="Game ID"></InputText> 
