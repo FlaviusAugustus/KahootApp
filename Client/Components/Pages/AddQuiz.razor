@@ -1,6 +1,58 @@
-﻿@page "/AddQuiz"
+﻿@page "/add"
+@rendermode InteractiveServer
+@using KahootFrontend.Models
+@using KahootFrontend.Services
+@inject ApiService _apiService
 <h3>AddQuiz</h3>
 
+
+<div class="container d-flex flex-column justify-content-center mt-5 w-75">
+    <h1>Add a Quiz</h1>
+    <div class="card rounded-2 p-5 col-12 col-md-6 col-xl-3">
+        <EditForm Model="@_quiz" OnValidSubmit="@SubmitQuiz" FormName="formQuiz">
+            <div class="d-flex flex-column justify-content-start gap-3">
+                <InputText @bind-Value="@_quiz.Title" placeholder="Title"/>
+                <InputText @bind-Value="@_quiz.Description" placeholder="Descriptopn"/>
+                <InputText @bind-Value="@_quiz.ImageUrl" placeholder="Image Url"/>
+                <button class="btn btn-primary w-50" @onclick="@AddQuestion">Add Question</button>
+                @for (var i = 0; i < _quiz.Questions.Count; i++)
+                {
+                    var index = i;
+                    <InputText @bind-Value="@_quiz.Questions[index].Value"/>
+                    <InputText @bind-Value="@_quiz.Questions[index].ImageUrl"></InputText>
+                }
+                <button class="btn btn-primary w-50" type="submit">Submit</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@if (submitted)
+{
+    @_quiz.Title
+    @_quiz.Description
+    foreach (var question in _quiz.Questions)
+    {
+        @question.Value
+    }
+}
+
 @code {
-    
+    private readonly Quiz _quiz = new();
+    private bool submitted = false;
+
+    private void SubmitQuiz()
+    {
+        submitted = true;
+    }
+
+    private void AddQuestion()
+    {
+        if (_quiz.Questions is null)
+        {
+            _quiz.Questions = new List<Question>();
+        }
+        _quiz.Questions.Add(new Question()); 
+        StateHasChanged();
+    }
 }
