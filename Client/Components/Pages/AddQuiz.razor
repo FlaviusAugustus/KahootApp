@@ -2,57 +2,124 @@
 @rendermode InteractiveServer
 @using KahootFrontend.Models
 @using KahootFrontend.Services
-@inject ApiService _apiService
-<h3>AddQuiz</h3>
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@inject ApiService ApiService
+@inject ProtectedSessionStorage SessionStorage
 
-
-<div class="container d-flex flex-column justify-content-center mt-5 w-75">
+<div class="container d-flex flex-column justify-content-center mt-5  col-sm-12 col-md-8 col-xl-5">
     <h1>Add a Quiz</h1>
-    <div class="card rounded-2 p-5 col-12 col-md-6 col-xl-3">
+    <div class="card rounded-2 p-5 w-100">
         <EditForm Model="@_quiz" OnValidSubmit="@SubmitQuiz" FormName="formQuiz">
-            <div class="d-flex flex-column justify-content-start gap-3">
-                <InputText @bind-Value="@_quiz.Title" placeholder="Title"/>
-                <InputText @bind-Value="@_quiz.Description" placeholder="Descriptopn"/>
-                <InputText @bind-Value="@_quiz.ImageUrl" placeholder="Image Url"/>
-                <button class="btn btn-primary w-50" @onclick="@AddQuestion">Add Question</button>
+            <div class="d-grid gy-3">
+                <div class="row mb-2">
+                    <div class="col">
+                        <InputText @bind-Value="@_quiz.Title" @bind-Value:after="SaveProgress" placeholder="Title" class="w-100"/>
+                    </div>
+                    <div class="col">
+                        <InputText @bind-Value="@_quiz.ImageUrl" @bind-Value:after="SaveProgress" placeholder="Image Url" class="w-100"/>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <InputTextArea @bind-Value="@_quiz.Description" @bind-Value:after="SaveProgress" placeholder="Description" class="w-100"/>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col">
+                        <button class="btn btn-primary w-100" type="button" @onclick="@AddQuestion">Add Question</button>
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary w-100" type="submit">Submit</button>
+                    </div>
+                </div>
                 @for (var i = 0; i < _quiz.Questions.Count; i++)
                 {
                     var index = i;
-                    <InputText @bind-Value="@_quiz.Questions[index].Value"/>
-                    <InputText @bind-Value="@_quiz.Questions[index].ImageUrl"></InputText>
+                    <div class="d-flex flex-row justify-content-between">
+                        <h4>Question @(index + 1)</h4>
+                        <button type="button" class="btn btn-danger w-25" @onclick="() => RemoveQuestion(index)">X</button>
+                    </div>
+                    <hr/>
+                    <div class="row mb-2">
+                        <div class="col-8">
+                            <InputText @bind-Value="@_quiz.Questions[index].Value" @bind-Value:after="SaveProgress" placeholder="Question" class="w-100"/>
+                        </div>
+                        <div class="col-4">
+                            <InputText @bind-Value="@_quiz.Questions[index].ImageUrl" @bind-Value:after="SaveProgress" placeholder="Image Url" class="w-100"/>
+                        </div>
+                    </div>
+                    
+                    @for (var j = 0; j < _quiz.Questions[index].Choices.Count; j++)
+                    {
+                        var indexAnswer = j;
+                        var choices = _quiz.Questions[index].Choices;
+                        <div class="row mb-3">
+                            <div class="col-8">
+                                <InputText  @bind-Value="@choices[indexAnswer].Answer" @bind-Value:after="SaveProgress" placeholder="Answer" class="w-100"/>
+                            </div>
+                            <div class="col-4">
+                                <InputCheckbox @bind-Value="@choices[indexAnswer].Correct" @bind-Value:after="SaveProgress" 
+                                               DisplayName="Correct"/>
+                            </div>
+                        </div>
+                    }
                 }
-                <button class="btn btn-primary w-50" type="submit">Submit</button>
             </div>
         </EditForm>
     </div>
 </div>
 
-@if (submitted)
-{
-    @_quiz.Title
-    @_quiz.Description
-    foreach (var question in _quiz.Questions)
-    {
-        @question.Value
-    }
-}
-
 @code {
-    private readonly Quiz _quiz = new();
-    private bool submitted = false;
+    private Quiz _quiz = new();
 
-    private void SubmitQuiz()
+    private async Task SubmitQuiz()
     {
-        submitted = true;
+        await ApiService.Client.PostAsJsonAsync("/api/quiz/add", _quiz);
+        await SessionStorage.DeleteAsync("quiz");
+        _quiz = new Quiz();
     }
 
-    private void AddQuestion()
+    private async Task AddQuestion()
     {
-        if (_quiz.Questions is null)
+        var newQuestion = new Question
         {
-            _quiz.Questions = new List<Question>();
+            Choices = new List<Choice>(4)
+        };
+
+        for (var i = 0; i < 4; i++)
+        {
+            newQuestion.Choices.Add(new Choice());
         }
-        _quiz.Questions.Add(new Question()); 
+
+        _quiz.Questions.Add(newQuestion);
+        await SaveProgress();
         StateHasChanged();
     }
+
+    private async Task RemoveQuestion(int index)
+    {
+       _quiz.Questions.RemoveAt(index);
+       await SaveProgress();
+       StateHasChanged();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            var result = await SessionStorage.GetAsync<Quiz>("quiz");
+            if (result.Success)
+            {
+                _quiz = result.Value!;
+                StateHasChanged();
+            }
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task SaveProgress()
+    {
+        await SessionStorage.SetAsync("quiz", _quiz);
+    }
+
 }
