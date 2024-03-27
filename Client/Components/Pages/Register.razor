@@ -8,10 +8,22 @@
         <h3>Register</h3>
         <EditForm Model="@_requestModel" OnValidSubmit="@LogIn" FormName="form">
             <div class="d-flex flex-column justify-content-start gap-3">
-                <InputText @bind-Value="@_requestModel.UserName" placeholder="Username"/>
-                <InputText @bind-Value="@_requestModel.Email" placeholder="Email"/>
-                <InputText type="password" @bind-Value="@_requestModel.Password" placeholder="Password"/>
-                <InputText type="password" @bind-Value="@_requestModel.PasswordRepeat" placeholder="Repeat Password"/>
+                <div class="position-relative">
+                    <label>Username</label>
+                    <InputText @bind-Value="@_requestModel.UserName" class="w-100"/>
+                </div>
+                <div class="position-relative">
+                    <label>Email</label>
+                    <InputText @bind-Value="@_requestModel.Email" class="w-100"/>
+                </div>
+                <div class="position-relative">
+                    <label>Password</label>
+                    <InputText type="password" @bind-Value="@_requestModel.Password" class="w-100"/>
+                </div>
+                <div class="position-relative">
+                    <label>Repeat Password</label>
+                    <InputText type="password" @bind-Value="@_requestModel.PasswordRepeat" class="w-100"/>
+                </div>
                 <button class="btn btn-primary w-50" type="submit">Submit</button>
             </div>
         </EditForm>

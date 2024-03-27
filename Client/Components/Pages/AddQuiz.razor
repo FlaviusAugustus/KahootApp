@@ -12,16 +12,19 @@
         <EditForm Model="@_quiz" OnValidSubmit="@SubmitQuiz" FormName="formQuiz">
             <div class="d-grid gy-3">
                 <div class="row mb-2">
-                    <div class="col">
-                        <InputText @bind-Value="@_quiz.Title" @bind-Value:after="SaveProgress" placeholder="Title" class="w-100"/>
+                    <div class="col position-relative">
+                        <label>Title</label>
+                        <InputText @bind-Value="@_quiz.Title" @bind-Value:after="SaveProgress" class="w-100"/>
                     </div>
-                    <div class="col">
-                        <InputText @bind-Value="@_quiz.ImageUrl" @bind-Value:after="SaveProgress" placeholder="Image Url" class="w-100"/>
+                    <div class="col position-relative">
+                        <label>Image Url</label>
+                        <InputText @bind-Value="@_quiz.ImageUrl" @bind-Value:after="SaveProgress" class="w-100"/>
                     </div>
                 </div>
                 <div class="row mb-2">
-                    <div class="col-12">
-                        <InputTextArea @bind-Value="@_quiz.Description" @bind-Value:after="SaveProgress" placeholder="Description" class="w-100"/>
+                    <div class="col-12 position-relative">
+                        <label>Description</label>
+                        <InputTextArea @bind-Value="@_quiz.Description" @bind-Value:after="SaveProgress" class="w-100"/>
                     </div>
                 </div>
                 <div class="row mb-5">
@@ -41,11 +44,13 @@
                     </div>
                     <hr/>
                     <div class="row mb-2">
-                        <div class="col-8">
-                            <InputText @bind-Value="@_quiz.Questions[index].Value" @bind-Value:after="SaveProgress" placeholder="Question" class="w-100"/>
+                        <div class="col-8 position-relative">
+                            <label>Value</label>
+                            <InputText @bind-Value="@_quiz.Questions[index].Value" @bind-Value:after="SaveProgress" class="w-100"/>
                         </div>
-                        <div class="col-4">
-                            <InputText @bind-Value="@_quiz.Questions[index].ImageUrl" @bind-Value:after="SaveProgress" placeholder="Image Url" class="w-100"/>
+                        <div class="col-4 position-relative">
+                            <label>Image Url</label>
+                            <InputText @bind-Value="@_quiz.Questions[index].ImageUrl" @bind-Value:after="SaveProgress" class="w-100"/>
                         </div>
                     </div>
                     
@@ -54,8 +59,9 @@
                         var indexAnswer = j;
                         var choices = _quiz.Questions[index].Choices;
                         <div class="row mb-3">
-                            <div class="col-8">
-                                <InputText  @bind-Value="@choices[indexAnswer].Answer" @bind-Value:after="SaveProgress" placeholder="Answer" class="w-100"/>
+                            <div class="col-8 position-relative">
+                                <label>Answer</label>
+                                <InputText  @bind-Value="@choices[indexAnswer].Answer" @bind-Value:after="SaveProgress" class="w-100"/>
                             </div>
                             <div class="col-4">
                                 <InputCheckbox @bind-Value="@choices[indexAnswer].Correct" @bind-Value:after="SaveProgress" 

@@ -2,6 +2,25 @@
     --shadow-color: black 
 }
 
+label {
+    position: absolute;
+    top: -11px;
+    left: 1.5em;
+    background-color: white;
+    padding: 1px 3px;
+    font-size: 0.8em;
+    color: rgb(115, 115, 115);
+}
+
+input {
+    padding: 4px;
+    margin-bottom: 3px;
+}
+
+form:nth-child(2) {
+    margin-top: 5px;
+}
+
 html, body {
     font-family: "Roboto", sans-serif;
     font-weight: 400;
