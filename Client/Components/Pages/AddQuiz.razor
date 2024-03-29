@@ -2,9 +2,11 @@
 @rendermode InteractiveServer
 @using KahootFrontend.Models
 @using KahootFrontend.Services
+@using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
 @inject ApiService ApiService
 @inject ProtectedSessionStorage SessionStorage
+@inject NavigationManager NavigationManager
 
 <div class="container d-flex flex-column justify-content-center mt-5  col-sm-12 col-md-8 col-xl-5">
     <h1>Add a Quiz</h1>
@@ -76,13 +78,47 @@
 </div>
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthState { get; set; }
+    
     private Quiz _quiz = new();
+    private bool submitted = false;
 
     private async Task SubmitQuiz()
     {
         await ApiService.Client.PostAsJsonAsync("/api/quiz/add", _quiz);
         await SessionStorage.DeleteAsync("quiz");
         _quiz = new Quiz();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var result = await SessionStorage.GetAsync<Quiz>("quiz");
+            if (result.Success)
+            {
+                _quiz = result.Value!;
+                StateHasChanged();
+            }
+            
+            if (AuthState is null)
+            {
+                NavigationManager.NavigateTo("/login");
+            }
+
+            var authState = await AuthState;
+            if (authState.User.Identity?.IsAuthenticated is not true)
+            {
+                NavigationManager.NavigateTo("/login");
+            }
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     private async Task AddQuestion()
@@ -109,23 +145,8 @@
        StateHasChanged();
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if(firstRender)
-        {
-            var result = await SessionStorage.GetAsync<Quiz>("quiz");
-            if (result.Success)
-            {
-                _quiz = result.Value!;
-                StateHasChanged();
-            }
-        }
-        await base.OnAfterRenderAsync(firstRender);
-    }
-
     private async Task SaveProgress()
     {
         await SessionStorage.SetAsync("quiz", _quiz);
     }
-
 }
