@@ -1,0 +1,78 @@
+﻿@page "/join-game"
+@using Microsoft.AspNetCore.SignalR.Client
+@using Microsoft.AspNetCore.Components.Authorization
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
+
+<PageTitle>Join Game</PageTitle>
+
+<div class="container d-flex flex-column justify-content-center mt-5 w-75">
+    <h2>Join a Game</h2>
+    <div class="card rounded-2 p-5 w-100">
+        <EditForm Model="@_request" OnValidSubmit="@JoinGroup" FormName="form">
+            <div class="d-grid gy-3">
+                <div class="row">
+                    <div class="col-6 position-relative">
+                        <label>Game ID</label>
+                        <InputText class="w-100" @bind-Value="@_request.GroupID"/>
+                    </div>
+                    <div class="col-6 position-relative">
+                        <label>UserName</label>
+                        <InputText class="w-100" @bind-Value="@_request.UserName"/>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-3">
+                        <button class="btn btn-primary w-100" type="submit">Submit</button>
+                    </div>
+                </div>
+            </div>
+            @if (_error != string.Empty)
+            {
+                @_error
+            }
+        </EditForm>
+    </div>
+</div>
+
+
+
+@code 
+{
+    private readonly JoinRequest _request = new();
+    private string _error = string.Empty;
+    private HubConnection _connection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //_connection = new HubConnectionBuilder()
+        //    .WithUrl("http://host.docker.internal:7161/game")
+        //    .Build();
+
+        //_connection.On<string>("FailedToJoinGame", (message) =>
+        //{
+        //    _error = message;
+        //});
+
+        //_connection.On("GameJoined", () =>
+        //{
+        //    NavigationManager.NavigateTo("/play");
+        //});
+
+        //await _connection.StartAsync();
+    }
+
+    private async Task JoinGroup()
+    {
+        await _connection.InvokeAsync("JoinGroup", _request.GroupID, _request.UserName);
+    }
+
+    class JoinRequest
+    {
+        public string GroupID { get; set; }
+        public string UserName { get; set; }
+    }
+
+}
+
