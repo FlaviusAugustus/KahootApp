@@ -1,8 +1,13 @@
+using System.Text;
 using DefaultNamespace;
 using KahootFrontend.Components;
 using KahootFrontend.Services;
 using KahootFrontend.Services.KahootAuthStateProvider;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +22,20 @@ builder.Services.AddHttpClient<ApiService>();
 builder.Services.AddScoped<AuthenticationStateProvider, KahootAuthStateProvider>();
 
 builder.Services.AddCascadingAuthenticationState();
+
+builder.Services.AddOptions();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opts =>
+{
+    opts.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = false,
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = false,
+        ClockSkew = TimeSpan.Zero,
+    };
+});
 
 builder.Services.Configure<HttpClientOptions>(builder.Configuration.GetSection(HttpClientOptions.Section));
 var app = builder.Build();
@@ -34,7 +53,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
+app.UseAuthentication();
+
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+app.UseAuthorization();
 
 app.Run();
