@@ -1,8 +1,11 @@
+using System.Net.Mime;
 using System.Text;
+using System.Text.Unicode;
 using DefaultNamespace;
 using KahootFrontend.Components;
 using KahootFrontend.Services;
 using KahootFrontend.Services.KahootAuthStateProvider;
+using KahootFrontend.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -23,16 +26,26 @@ builder.Services.AddScoped<AuthenticationStateProvider, KahootAuthStateProvider>
 
 builder.Services.AddOptions();
 
+builder.Services.Configure<JWT>(builder.Configuration.GetSection(JWT.JWTConfig));
+
+
 builder.Services.AddCascadingAuthenticationState();
+
+var options = builder.Configuration
+    .GetSection(JWT.JWTConfig)
+    .Get<JWT>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opts =>
 {
     opts.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuerSigningKey = false,
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateLifetime = false,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options!.Key)),
+        ValidateIssuer = true,
+        ValidIssuer = options.Issuer,
+        ValidateAudience = true,
+        ValidAudience = options.Audience,
+        ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero,
     };
 });
