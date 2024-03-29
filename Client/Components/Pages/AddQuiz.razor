@@ -2,7 +2,10 @@
 @rendermode InteractiveServer
 @using KahootFrontend.Models
 @using KahootFrontend.Services
+@using Microsoft.AspNetCore.Components.Authorization
 @inject ApiService _apiService
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 <h3>AddQuiz</h3>
 
 
@@ -38,12 +41,38 @@
 }
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthState { get; set; }
+    
     private readonly Quiz _quiz = new();
     private bool submitted = false;
 
     private void SubmitQuiz()
     {
         submitted = true;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (AuthState is null)
+            {
+                NavigationManager.NavigateTo("/login");
+            }
+
+            var authState = await AuthState;
+            if (authState.User.Identity?.IsAuthenticated is not true)
+            {
+                NavigationManager.NavigateTo("/login");
+            }
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     private void AddQuestion()

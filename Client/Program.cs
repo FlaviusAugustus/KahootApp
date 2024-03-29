@@ -21,9 +21,9 @@ builder.Services.AddHttpClient<ApiService>();
 
 builder.Services.AddScoped<AuthenticationStateProvider, KahootAuthStateProvider>();
 
-builder.Services.AddCascadingAuthenticationState();
-
 builder.Services.AddOptions();
+
+builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opts =>
 {
