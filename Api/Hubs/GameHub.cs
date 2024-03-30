@@ -6,67 +6,36 @@ namespace KahootBackend.Hubs;
 
 public class GameHub(IGameService gameService) : Hub<IGameTypedHub>
 {
-     public GroupInfo CreateGroup(string roomName)
-     {
-          var groupID = Guid.NewGuid().ToString(); 
-          gameService.AddGame(Context.ConnectionId, groupID);
-          return new GroupInfo
-          {
-               HostConnectionID = Context.ConnectionId, 
-               GroupID = groupID
-          };
-     }
+    private ConnectionStore<string> _connectionStore = new();
+    
+    public override async Task OnConnectedAsync()
+    {
+        var name = Context.User?.Identity?.Name;
+        if (name is null)
+        {
+            await base.OnConnectedAsync();
+            return;
+        }
 
-     public async Task JoinGroup(string groupId, string userName)
-     {
-          var joinRequest = new JoinRequest
-          {
-               GroupID = groupId,
-               UserName = userName,
-               ConnectionID = Context.ConnectionId
-          };
-          
-          var joinResult = gameService.JoinGroup(joinRequest);
-          if (!joinResult.Success)
-          {
-               await Clients.Caller.FailedToJoinGame(joinResult.Message);
-               return;
-          }
-          
-          await Groups.AddToGroupAsync(Context.ConnectionId, groupId);
+        foreach (var group in _connectionStore.GetGroups(name))
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, group);
+        }
+        
+        _connectionStore.AddConnection(name, Context.ConnectionId);
+        await base.OnConnectedAsync();
+    }
 
-          var hostConnectionId = gameService.GetHost(groupId);
-          await Clients.Client(hostConnectionId).PlayerJoined(userName);
-          await Clients.Caller.GameJoined(userName);
-     }
-
-     public void StopGame(string groupID)
-     {
-          gameService.RemoveGame(groupID);
-     }
-
-     public void StartGame(string groupID)
-     {
-          gameService.StartGame(groupID);
-     }
-
-     public async Task SendScore(GameAnswer gameAnswer)
-     {
-          var isAnswerCorrect = gameService.ProcessAnswer(gameAnswer);
-          var gameInfo = gameService.GetGameState(gameAnswer.GameID);
-          
-          await Clients.Client(gameInfo.HostConnectionID).PlayerAnswered(isAnswerCorrect.ToString());
-          await Clients.Caller.ReceiveQuestionResult(isAnswerCorrect.ToString());
-     }
-
-     public async Task GetNextQuestion(string groupID, int questionID = -1)
-     {
-          var gameExists = gameService.GameHosts.TryGetValue(groupID, out var gameInfo);
-          if (!gameExists)
-          {
-               return;
-          }
-          var nextQuestionId = questionID++;
-          await Clients.Client(gameInfo!.HostConnectionID).NextQuestion(gameInfo.Quiz.Questions[nextQuestionId]);
-     }
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        var name = Context.User?.Identity?.Name;
+        if (name is null)
+        {
+            await base.OnDisconnectedAsync(exception);
+            return;
+        }
+        
+        _connectionStore.RemoveConnection(name, Context.ConnectionId);
+        await base.OnDisconnectedAsync(exception);
+    }
 }
