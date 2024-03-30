@@ -4,8 +4,10 @@ using KahootBackend.AuthHandlers.Requirements;
 using KahootBackend.Hubs;
 using KahootBackend.Services.DateTimeProvider;
 using KahootBackend.Services.QuizService;
+using KahootBackend.Services.UserIdProvider;
 using KahootBackend.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using QuizApi.Services.UserService;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +30,8 @@ builder.Services.AddControllers().AddJsonOptions(opts =>
 builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddSingleton<IUserIdProvider, UserIdProvider>();
 
 builder.Services.AddScoped<IQuizService, QuizService>();
 
