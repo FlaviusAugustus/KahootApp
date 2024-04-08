@@ -7,6 +7,7 @@ using KahootBackend.Services.QuizService;
 using KahootBackend.Services.UserIdProvider;
 using KahootBackend.Services.UserService;
 using Microsoft.AspNetCore.Authorization;
+using KahootBackend.Context;
 using Microsoft.AspNetCore.SignalR;
 using QuizApi.Services.UserService;
 
@@ -46,14 +47,13 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
     builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
-
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+var context = app.Services.GetService<ItemContext>();
+context?.Database.EnsureCreated();
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthentication();
 app.UseAuthorization();

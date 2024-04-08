@@ -9,12 +9,13 @@ public static class ConfigureDatabaseExtensions
 {
     public static void ConfigureDatabase(this IServiceCollection services, IConfiguration config)
     {
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+        services.AddScoped<IQuizRepository, QuizRepository>();
         services.AddSingleton<IGameService, GameService>();
         services.AddDbContext<Context.ItemContext>(opts =>
         {
             opts.UseSqlite(config.GetConnectionString("database"));
         });
-        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>)); 
-        services.AddScoped<IQuizRepository, QuizRepository>(); 
+
     }
 }
