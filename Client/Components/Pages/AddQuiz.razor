@@ -4,6 +4,7 @@
 @using KahootFrontend.Services
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage
+@using System.Net.Http.Headers
 @inject ApiService ApiService
 @inject ProtectedSessionStorage SessionStorage
 @inject NavigationManager NavigationManager
@@ -85,6 +86,12 @@
 
     private async Task SubmitQuiz()
     {
+	var result = await SessionStorage.GetAsync<string>("token");
+	if (result.Success)
+	{
+	    	
+	    ApiService.Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.Value);
+	}
         await ApiService.Client.PostAsJsonAsync("/api/quiz/add", _quiz);
         await SessionStorage.DeleteAsync("quiz");
         _quiz = new Quiz();
