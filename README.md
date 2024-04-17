@@ -20,8 +20,8 @@ SwaggerUI - http://localhost:7161/swagger
 
 ## Implemented Features
 - CRUD operations
-- JWT authorization
-- resource and policy based authentication
+- JWT authentication
+- resource and policy based authorization
 - UI written in Blazor
 - Project deployment with a seeded database via Docker
 
